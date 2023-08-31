@@ -1,0 +1,143 @@
+@charset "UTF-8";
+
+/*===========================================================================
+common
+=============================================================================*/
+html,
+body {
+    height: 100%;
+    
+}
+
+html,body,h1,ol,ul,li,div,h2 {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    
+}
+ul,ol,li{
+    list-style: none;
+ 
+}
+a:hover {
+	color: black;
+    text-decoration: none;
+}
+/*===========================================================================
+header
+=============================================================================*/
+.header {
+    margin-bottom: 50px;
+    height: 113px;
+    border-bottom: 1px solid #ddd;
+}
+
+.headerContents {
+    width: 100%;
+    height: 113px;
+    margin: 0 0 50px;
+}
+
+.headerContents h1 {
+    width: 274px;
+    height: 57px;
+}
+
+.headerContents .contents {
+    padding: 30px 5px 25px 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header h1 img {
+    width: 200px;
+    height: 100%;
+
+}
+
+.header h1 span {
+	margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.member {
+    width: 400px;
+    height: 57px;
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: space-evenly;
+}
+
+.member li {
+    width: 36px;
+    height: 100%;
+}
+
+.member a {
+    height: 57px;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    font-weight: bold;
+}
+.member a:hover {
+    color: black;
+    text-decoration: none;	
+}
+.member img {
+    height: 100%;
+}
+.member #m_info {
+	font-weight: bold;
+	margin-top: 10px;
+	
+}
+
+/*===========================================================================
+nav
+=============================================================================*/
+.nav {
+    margin: -70px 0px;
+    height: 65px;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav a {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.nav li {
+    width: 100%;
+    height: 40px;
+}
+
+.nav_menu {
+    width: 100%;
+    display: inline-flex;
+}
+
+.nav_menu .search form {
+	margin-top: 8px;
+	display: inline-flex;
+}
+
+.nav_menu .search .btn {
+	margin-left: 5px;
+	font-weight: bold;
+}

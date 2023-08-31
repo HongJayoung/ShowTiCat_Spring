@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+
+<link rel="stylesheet" th:href="@{/css/header.css}" />
+</head>
+<body>
+<div th:fragment="header1" class="header">
+        <!-- 헤더 컨텐츠 -->
+        <div class="headerContents">
+            <div class="contents">
+                <!-- 로고 및 사이트 이름 -->
+                <h1>
+                    <a th:href="@{/ShowTiCat}">
+	                    <img th:src="@{/images/showticat_logo.png}" alt="ShowTiCat">
+	                    <!-- 사이트 이름 -->
+                    </a>
+                </h1>
+                
+                <!-- 회원관련창 -->
+	            <ul th:if ="${session.member != null}" class="member">
+		            <li></li>
+	                    <il>
+	                        <a th:href="@{/logout}" id="logout">
+	                        	<img th:src="@{/images/login.png}" alt="logout">
+	                            <span>로그아웃</span>
+	                        </a>
+	                    </il>
+	                    <il>
+	                        <a th:href="@{/ShowTiCat/myPage}">
+	                        <img th:src="@{/images/mypage.png}" alt="mypage">
+	                            <span>MyPage</span>
+	                        </a>
+	                    </il>
+                		<il id="m_info">
+		                    <span><br>
+			                    [[${session.member.name}]]님<br>
+				                [[${session.member.mPoint}?:0]]점
+			                </span>
+	                    </il>
+	             </ul>
+	             
+	             <ul th:if ="${session.member == null}" class="member">
+		            <li></li>
+	                    <il>
+	                        <a th:href="@{/auth/login}">
+	                        	<img th:src="@{/images/login.png}" alt="login">
+	                            <span>로그인</span>
+	                        </a>
+	                    </il>
+	                    <il>
+	                        <a th:href="@{/auth/join}">
+	                        <img th:src="@{/images/register.png}" alt="register">
+	                            <span>회원가입</span>
+	                        </a>
+	                    </il>
+	                    <il>
+	                        <a th:href="@{/ShowTiCat/myPage}">
+	                        <img th:src="@{/images/mypage.png}" alt="mypage">
+	                            <span>MyPage</span>
+	                        </a>
+	                    </il>
+	            </ul><!-- member -->
+            </div><!-- contents -->
+        </div><!-- headerContents -->
+        
+        <div class="nav">
+            <div class="contents">
+                <ul class="nav_menu">
+                    <li>
+                        <h2><a href="${path}/jayoung/showList.do?category=영화" id="movieList">영화</a></h2>
+                    </li>
+                    <li>
+                        <h2><a href="${path}/jayoung/showList.do?category=공연" id="showList">공연</a></h2>
+                    </li>
+                    <li>
+                        <h2>
+	                        <th:if test="${session.member == null || session.member.place_num == 0}">
+	                        	<a href="${path}/jayoung/placeDetail.do?place_num=1020&date=${sysdate}" id="theaterList">극장</a>
+	                        </th:if>
+	                       <!--  <th:if test="${session.member != null && session.member.place_num != 0}">
+	                        	<a href="${path}/jayoung/placeDetail.do?place_num=${member.place_num}&date=${sysdate}" id="theaterList">극장</a>
+	                        </th:if> -->
+                        </h2>
+                    </li>
+                    <li>
+                        <h2><a href="${path}/jayoung/reservationFirst.do" id="reservation">예매</a></h2>
+                    </li>
+                    <li></li>
+                    <li></li>
+                    <li class="search">
+                        <form action="${path}/jayoung/result.do" id="formH">
+							<input type="text" name="word" id="searchH" th:value="${session.word}">
+							<input class="btn btn-light btn-sm" type="submit" value="검색">
+						</form>
+                    </li>
+                </ul>
+            </div><!-- contens -->
+        </div><!-- nav -->
+        
+        <script>
+		$(function() {
+			$("#logout").click(function() {
+				$("#logoutForm").submit();
+			});
+		})
+		</script>
+		
+    </div><!-- header -->
+
+<div th:fragment="header2">
+</div>
+</body>
+</html>

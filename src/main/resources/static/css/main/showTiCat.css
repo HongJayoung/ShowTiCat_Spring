@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+.contents {
+    width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 13px;
+}
+
+/*===========================================================================
+common
+=============================================================================*/
+html,
+body {
+    height: 100%;
+    
+}
+
+html,body,h1,ol,ul,li,div,h2 {
+    margin: 0;
+    padding: 0;
+}
+
+/*  body * {
+    outline: 3px dotted tomato;
+}*/ 
+
+a {	
+	cursor: revert;
+    color: black;
+    text-decoration: none;
+    white-space:nowrap;
+    
+}
+ul,ol,li{
+    list-style: none;
+ 
+}
+
+/*===========================================================================
+container
+=============================================================================*/
+.contaniner {
+    width: 100%;
+    height: 500px;
+    position: relative;
+    background-color: #000;
+
+}
+
+.banner {
+    width: 100%;
+    height: 100%;
+    background: url(../../images/exPoster1.png) no-repeat center;
+    background-size: 50% 50%;
+ 
+}
+
