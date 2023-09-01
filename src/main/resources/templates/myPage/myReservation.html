@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+
+<title>ShowTiCat | MYPAGE</title>
+
+<script>
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div th:replace="~{/myPage/side}"></div>
+		<h2>MY RESERVATION</h2>
+		[[${reservList}]]
+		<div>
+			<p>- 예매 취소의 경우 영화는 상영시간 기준 30분 전 까지, 공연은 하루 전 까지만 가능합니다. </p>
+			<p>- 리뷰는 관람일 다음날 부터 작성 가능합니다. </p>
+		</div>
+			<!-- 취소목록 -->
+			<div class="row justify-content-center">
+				<div class="col-auto">
+					<table class="table table-responsive">
+						<tr>
+							<td>예매번호</td>
+							<td>예매일자</td>
+							<td>공연/영화 제목</td>
+							<td>관람일</td>
+							<td>시작시간</td>
+							<td>카테고리</td>
+							<td>현재상태</td>
+							<td></td>
+						</tr>
+						<tr th:each="reserv:${reservList}">
+							<td>${resev.reservationId}</td>
+							<td>${resev.reservationDate }</td>
+							<td>${resev.schedule.show.showName}</td>
+							<td>${resev.schedule.showStart}</td>
+							<td>${resev.schedule.showStart}</td>
+							<td>${resev.schedule.show.category}</td>
+							<!-- 상태 -->
+							<td th:if="${resevation.payYn eq '예매완료'}" style="color: red;">
+								[[${resevation.payYn}]]
+							</td>
+							<td th:if="${resevation.payYn eq '관람완료'}" style="color: blue;">
+								[[${resevation.payYn}]]
+							</td>
+							<td th:if="${resevation.payYn eq '예매취소'}">
+								[[${resevation.payYn}]]
+							</td>
+							<!-- 상세보기 -->
+							<td>
+								<button>상세보기</button>
+							</td>
+							</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div><!-- contents -->
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/adminLayout.html}">
+<head>
+<meta charset="UTF-8">
+
+<title>ShowTiCat</title>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div class="listTitle">
+			<h2>상영 스케줄</h2>
+			<button class="btn btn-outline-primary" id="addScheduleBtn" data-toggle="modal" data-target="#myModal">
+				스케줄 등록
+			</button>
+		</div>
+	</div>
+	
+</div>
+</body>
+</html>

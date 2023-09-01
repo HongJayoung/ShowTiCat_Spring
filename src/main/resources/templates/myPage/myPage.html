@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+
+<title>ShowTiCat | MYPAGE</title>
+
+<script>
+$(function() {
+	$("#placeForm").hide();
+	$(".myPlaceBtn").on("click", showForm);
+	$(".resetBtn").on("click", reset);
+	$(".delBtn").on("click", delMyPlace);
+})
+
+function showForm() {
+	$("#placeForm").show();
+}
+
+function reset() {
+	$("#placeForm").hide();
+}
+
+function delMyPlace() {
+	$.ajax({
+		url:"../jayoung/deleteMyPlace.do",
+		success: function(resData) {
+			if(resData >= 1) {
+				alert("관심매장이 삭제되었습니다.");
+				location.href="../jaeyong/memberMyPage.do";
+			}
+		}
+	})
+}
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div th:replace="~{/myPage/side}"></div>
+		<div id="cont">
+		<div class="helloBox">
+		
+			<div class="userImage">
+			</div><!-- userImage -->
+			
+			<div class="helloText">			
+				<div class="helloTextBox1">
+					<h1>[[${session.member.name}]]</h1><span>님 </span><span> (ID:[[${session.member.memberId}]])</span>
+					<p></p>
+				</div><!-- helloTextBox1 -->
+				
+				<div class="helloTextBox2">	
+					<p>Welcome!! 어서오세요!!</p>
+					<p>즐거운 하루 되세요!!</p>
+				</div><!-- helloTextBox2 -->
+				
+			</div><!-- helloText -->
+		</div><!-- helloBox -->
+		
+		<div class="myInfo">
+				<div class="myPlace">
+					<h2>M Y P L A C E</h2>
+					<div class="placeText">
+					
+					<div th:if="${session.member.place == null}">
+						등록된 관심매장이 없습니다.	
+						<button class="btn btn-primary myPlaceBtn">등록</button>
+					</div>
+					
+					<div th:if="${session.member.place != null}">
+						ShowTiCat [[${session.member}]]
+						<button class="btn btn-primary myPlaceBtn">수정</button>
+						<button class="btn btn-primary delBtn">삭제</button>
+					</div>
+					<hr>
+					
+					<form action="../jayoung/interestPlace.do" method="post" id="placeForm">
+						<div class="form-group">
+						    <label for="sel1">매장 선택</label>
+						    <select class="form-control" name="place_num">
+						    	<th:forEach items="${placeList}" var="place">
+									<option value="${place.placeId}">ShowTiCat ${place.placeName}</option>        
+								</th:forEach>
+						    </select>
+							<input class="btn btn-outline-primary" type="submit" value="등록">
+							<input class="btn btn-outline-primary resetBtn" type="reset" value="취소">
+						</div>
+					</form>
+					
+					</div>
+
+				</div><!-- myPlace -->
+
+				<div class="myPoint">
+					<h2>M Y P O I N T</h2>
+					<div class="pointText">
+			 		<span>ShowTicat Point</span>
+					<h4 class=point>[[${session.member.mPoint?:0}]]</h4>
+					</div>
+					
+				</div><!-- myPoint -->		
+		</div><!-- myInfo -->
+		</div><!-- cont -->
+	</div><!-- contents -->
+</div>
+</body>
+</html>

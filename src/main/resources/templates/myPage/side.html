@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" th:href="@{/css/myPage/side.css}" />
+
+</head>
+<body>
+	<div class="mySide">
+		<div class="reservation">
+			<a th:href="@{/myPage/myReservation}">예매</a>
+		</div>
+		<!-- reservation -->
+		
+		<div class="myReview">
+			<a th:href="@{/myPage/myReview}">리뷰</a>
+		</div>
+		<!-- myReview -->
+
+		<div class="modifyPwCheck">
+			<a th:href="@{/myPage/updateInfo}">회원정보수정</a>
+		</div>
+		<!-- modifyPwCheck -->
+
+		<div class="delete">
+			<a th:href="@{/myPage/deleteAccount}">회원탈퇴</a>
+		</div>
+		<!-- delete -->
+	</div>
+	<!-- mySide -->
+</body>
+</html>

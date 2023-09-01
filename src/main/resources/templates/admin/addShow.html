@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/adminLayout.html}">
+<head>
+<meta charset="UTF-8">
+
+<title>ShowTiCat</title>
+
+<script>
+$(function() {
+	$(".category").on("change", changePrice);
+	$("#resetBtn").on("click", reset);
+	$("#returnBtn").on("click", goBack);
+	
+	//파일 업로더 label
+	$(".custom-file-input").on("change",function() {
+		var fileName = $(this).val().split("\\").pop();
+		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+	});
+})
+
+//category에 따라 가격 정해짐
+function changePrice() {
+	var option = document.getElementById("category").
+					options[document.getElementById("category").selectedIndex].value;
+	if (option == "영화") {
+		document.getElementById("price").value = 12000;
+	} else {
+		document.getElementById("price").value = 150000;
+	}
+}
+
+function reset() {
+	$("#fileName").html("Choose file");
+}
+
+function goBack() {
+	location.href="/ShowTiCat/admin/show";
+}
+</script>
+	
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h2>영화/공연 추가</h2> <hr>
+		<form th:action="@{/admin/addShow}" method="post" id="addShowForm" enctype="multipart/form-data">
+			<div class="form-group">
+				<label>제목</label> 
+				<input class="form-control" type="text" name="showName" value="">
+			</div>
+			<div class="form-group">
+				<label>감독</label> 
+				<input class="form-control" type="text" name="director" value="">
+			</div>
+			<div class="form-group">
+				<label>예고편</label> 
+				<input class="form-control" type="text" name="trailer" value="">
+				<!-- 형식지정 -->
+			</div>
+			<div class="form-group">
+				<label>개봉일자</label> 
+				<input class="form-control" type="date" name="openingDate" value="">
+			</div>
+			<div class="form-group">
+				<label>러닝타임(분)</label> 
+				<input class="form-control" type="number" name="runningTime" value="">
+			</div>
+			<div class="form-group">
+				<label>카테고리</label> 
+				<select class="form-control category" name="category" id="category">
+					<option value="영화">영화</option>
+					<option value="공연">공연</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label>줄거리</label>
+				<textarea class="form-control" name="summary"></textarea>
+			</div>
+			<div class="form-group">
+				<label>포스터</label>
+				<div class="custom-file form-control">
+					<input type="file" class="custom-file-input" id="customFile" name="file"> 
+					<label class="custom-file-label" for="customFile" id="fileName">Choose file</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>가격</label> <input class="form-control" type="number" name="price" readonly="readonly" id="price" value="12000">
+			</div>
+			<input class="btn btn-primary" type="submit" value="등록"> 
+			<input class="btn btn-secondary" type="reset" value="리셋" id="resetBtn"> 
+			<input class="btn btn-secondary" type="button" value="돌아가기" id="returnBtn">
+		</form>
+	</div>
+</div>
+</body>
+</html>
