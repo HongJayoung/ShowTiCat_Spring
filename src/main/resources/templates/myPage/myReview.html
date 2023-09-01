@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+
+<title>ShowTiCat | MYPAGE</title>
+
+<script>
+$(function() {
+	$(".updateBtn").on("click", updateReview);
+	$(".delBtn").on("click", deleteReview);
+})
+
+function deleteReview() {
+	var review_num = $(this).attr("num");
+	
+	if(confirm("리뷰를 정말 삭제하시겠습니까?")) {
+		$.ajax({
+			url:"deleteReview.do",
+			data:{"review_num":review_num},
+			success: function(resData) {
+				if(resData >= 2) {
+					alert("리뷰가 삭제되었습니다.");
+					location.href="myReview.do";
+				}
+			}
+		})
+	}
+}
+
+function updateReview() {
+	var review_num = $(this).attr("num");
+	location.href="updateReview.do?review_num="+review_num;
+}
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div th:replace="~{/myPage/side}"></div>
+		<div class="centerHidden">
+			<h2>MY REVIEW</h2>
+			[[${reviewList}]]
+			<p th:if="${reviewList == null}">등록한 리뷰가 없습니다.</p>
+			
+			<table th:if="${reviewList != null}" class="table">
+				<thead id="thead">
+					<tr>
+						<th class="n">번호</th>
+						<th class="t">제목</th>
+						<th class="n">평점</th>
+						<th class="c">한줄평</th>
+						<th class="d">작성일</th>
+						<th class="b"></th>
+						<th class="b"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="review:${reviewList}">
+						<td class="n">[[${review.reviewId}]]</td>
+						<td class="t">[[${review.show.showName}]]</td>
+						<td class="n">[[${review.grade}]]</td>
+						<td>[[${review.content}]]</td>
+						<td class="d">[[${review.reviewDate}]]</td>
+						<td class="b">
+							<button class="btn btn-info btn-sm updateBtn" th:review-Id="${review.reviewId}">
+								리뷰수정
+							</button>
+						</td>
+						<td class="b">
+							<button class="btn btn-outline-info btn-sm delBtn" th:review-Id="${review.reviewId}">
+								리뷰삭제
+							</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div><!-- centerHidden -->
+	</div>
+</div>
+</body>
+</html>

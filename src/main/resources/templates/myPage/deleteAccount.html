@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+
+<title>ShowTiCat | MYPAGE</title>
+
+<script>
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div th:replace="~{/myPage/side}"></div>
+		<h2>DELETE ACCOUNT</h2>
+	</div><!-- contents -->
+</div>
+</body>
+</html>

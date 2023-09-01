@@ -1,0 +1,100 @@
+@charset "UTF-8";
+
+/* 
+body * {
+	outline : 2px solid tomato;
+}
+ */
+#cont {
+	height : 100%;
+}
+.userImage {
+	width : 200px;
+	height : 200px;
+	background-image: url("../images/UserCat.jpg");
+	background-size: 100% 100%;
+	outline: 1px solid #eee; 
+
+}
+
+.helloBox {
+	display: flex;
+}
+
+.helloBox h1 {
+	width: fit-content;
+	display: inline;
+	
+}
+
+.helloText {
+	width: 55%;
+	border-right: 1px solid #eee;
+	
+}
+
+.helloTextBox1 {
+	width: 85%;
+    margin: 0px 0px 20px 20px;
+	padding: 0px 0px 20px;
+	border-bottom: 1px solid #eee;
+	
+}
+
+.helloTextBox2 {
+	width: 85%;
+	margin: auto 20px;
+}
+
+.myInfo {
+	margin-top: 60px;
+	display: flex;
+	justify-content: space-evenly;
+}
+
+.myInfo h2 {
+	text-align: center;
+	margin-bottom: 15px;
+	
+}
+
+.myPlace span {
+	margin:0 auto;
+	
+}
+
+.myPlace {	
+	width: 50%;
+	border-right: 1px solid #eee;
+	
+}
+
+.placeText {
+	width: 270px;
+	height: 240px;
+	margin: 0 auto;
+	border-bottom: 1px solid #eee;
+}
+
+.myPoint {
+	width: 50%;
+	
+}
+
+.pointText {
+	width: 270px;
+	height: 240px;
+	margin: 0 auto;
+	border-bottom: 1px solid #eee;
+	display: flex;
+	justify-content: space-between;;
+}
+
+h4.point {
+	font-size: 18px;
+	
+}
+
+.placeText hr {
+	display: none;
+}

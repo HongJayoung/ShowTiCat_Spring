@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+
+<title>ShowTiCat | MYPAGE</title>
+
+<script>
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div th:replace="~{/myPage/side}"></div>
+		<h2>UPDATE MY INFO</h2>
+		<form action="#" method="post" id="updateForm"><br>
+			<label>아이디 : [[${session.member.memberId}]] </label>
+			<input type="hidden" name="m_id" th:value="${session.member.memberId}" readonly="readonly"><br><br>
+				   
+			<label>비밀번호 : </label>
+			<input type="password" name="m_pw" id="m_pw"><br>
+	               
+			<label>비밀번호확인 : </label>
+			<input type="password" id="pw2">
+			<span id="pwMsg"></span><br><br>
+				   
+			<label>이름 : </label>
+	        <input type="text" name="m_name" th:value="${session.member.name}"><br>
+			<br>
+				
+			<label>핸드폰 번호 : </label>
+			<input type="text" name="phone" pattern="[01]{2}[01679]{1}[0-9]{7,8}" th:value="${session.member.phone}">
+			<p>-를 빼고 숫자만 입력해주세요</p>
+	
+			<label>생일 : </label>
+			<input type="date" name="birth" th:value="${session.member.birth}"><br><br>
+					   
+			<label>성별 : </label>
+			<label>
+			<input type="radio" name="gender" value="M" ${session.member.gender=="M"?"checked":""}>남
+			</label>
+			<label>
+			<input type="radio" name="gender" value="W" ${session.member.gender=="W"?"checked":""}>여
+			</label><br>
+			<label>이메일 : </label>
+			<input type="email" name="email" th:value="${session.member.email}">
+			<p>ex) ShowTiCat@gamil.com</p>
+		    <input type="submit" class="btn btn-outline-success" value="수정완료">
+	    </form>
+	</div><!-- contents -->
+</div>
+</body>
+</html>
