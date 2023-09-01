@@ -31,26 +31,22 @@ public class MemberController {
 	}
 	
 	@GetMapping("/myPage/myReservation")
-	public String myReservation(HttpSession session, Model model) {
+	public void myReservation(HttpSession session, Model model) {
 		MemberVO m = (MemberVO) session.getAttribute("member");
 		model.addAttribute("reservList", reRepo.findByMemberId(m.getMemberId()));
-		return "/myPage/myReservation";
 	}
 	
 	@GetMapping("/myPage/myReview")
-	public String myReview(HttpSession session, Model model) {
+	public void myReview(HttpSession session, Model model) {
 		MemberVO m = (MemberVO) session.getAttribute("member");
 		model.addAttribute("reviewList", rRepo.findByMemberId(m.getMemberId()));
-		return "/myPage/myReview";
 	}
 	
 	@GetMapping("/myPage/updateInfo")
-	public String updateInfo() {
-		return "/myPage/updateInfo";
+	public void updateInfo() {
 	}
 	
 	@GetMapping("/myPage/deleteAccount")
-	public String deleteAccount() {
-		return "/myPage/deleteAccount";
+	public void deleteAccount() {
 	}
 }

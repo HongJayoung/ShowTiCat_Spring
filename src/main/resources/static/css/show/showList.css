@@ -3,6 +3,11 @@
 	position: relative;
 	overflow: hidden;
 }
+
+.poster img {
+	 width: 250px;
+	 height: 335px;
+}
 .poster:hover img{
 	opacity: 0.3;
 }

@@ -3,7 +3,6 @@
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 
-<link rel="stylesheet" th:href="@{/css/header.css}" />
 </head>
 <body>
 <div th:fragment="header1" class="header">
@@ -28,7 +27,7 @@
 	                        </a>
 	                    </il>
 	                    <il>
-	                        <a th:href="@{/ShowTiCat/myPage}">
+	                        <a th:href="@{/myPage}">
 	                        <img th:src="@{/images/mypage.png}" alt="mypage">
 	                            <span>MyPage</span>
 	                        </a>
@@ -56,7 +55,7 @@
 	                        </a>
 	                    </il>
 	                    <il>
-	                        <a th:href="@{/ShowTiCat/myPage}">
+	                        <a th:href="@{/myPage}">
 	                        <img th:src="@{/images/mypage.png}" alt="mypage">
 	                            <span>MyPage</span>
 	                        </a>
@@ -69,10 +68,10 @@
             <div class="contents">
                 <ul class="nav_menu">
                     <li>
-                        <h2><a href="${path}/jayoung/showList.do?category=영화" id="movieList">영화</a></h2>
+                        <h2><a th:href="@{/show/영화}" id="movieList">영화</a></h2>
                     </li>
                     <li>
-                        <h2><a href="${path}/jayoung/showList.do?category=공연" id="showList">공연</a></h2>
+                        <h2><a th:href="@{/show/공연}" id="showList">공연</a></h2>
                     </li>
                     <li>
                         <h2>
@@ -109,7 +108,36 @@
 		
     </div><!-- header -->
 
+<!-- 관리자 페이지 header -->
 <div th:fragment="header2">
+	
+        <div class="nav">
+            <div class="header_cont">
+                <ul class="nav_menu">
+                    <li>
+                        <h2><a th:href="@{/ShowTiCat/admin/show}" id="show">영화/공연</a></h2>
+                    </li>
+                    <li>
+                        <h2><a th:href="@{/ShowTiCat/admin/place}" id="place">극장</a></h2>
+                    </li>
+                    <li>
+                        <h2><a th:href="@{/ShowTiCat/admin/theater}" id="theater">상영관</a></h2>
+                    </li>
+                    <li>
+                        <h2><a th:href="@{/ShowTiCat/admin/schedule}" id="schedule">상영스케줄</a></h2>
+                    </li>
+                    <li></li>
+                    <li></li>
+                </ul>
+		        <!-- 로고 및 사이트 이름 -->
+		        <h1>
+		        	<a th:href="@{/ShowTiCat}">
+			        	<img th:src="@{/images/showticat_logo.png}" alt="ShowTiCat">
+			            <!-- 사이트 이름 -->
+		            </a>
+		       </h1>
+            </div><!-- contens -->
+        </div><!-- nav -->
 </div>
 </body>
 </html>
