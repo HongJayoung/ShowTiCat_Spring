@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/adminLayout.html}">
+<head>
+<meta charset="UTF-8">
+
+<title>ShowTiCat</title>
+
+<script>
+$(function() {
+	$("#addShowBtn").on("click", addShow);
+	$(".showDetail").on("click", showDetail);
+})
+
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+	
+function addShow() {
+	location.href="/admin/addShow";
+}
+
+function showDetail() {
+	var showCode = $(this).attr("show-code");
+	
+	$.ajax({
+		type:"post",
+		url: "/admin/findShow/"+showCode,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success:function(resData) {
+			$("input[name='showCode']").val(resData.showCode);
+			$("input[name='showName']").val(resData.showName);
+			$("input[name='director']").val(resData.director);
+			$("input[name='openingDate']").val(resData.openingDate);
+			$("input[name='runningTime']").val(resData.runningTime);
+			$("select[name='category']").val(resData.category);
+			$("textarea[name='summary']").val(resData.summary);
+			$("input[name='poster']").val(resData.poster);
+			$("input[name='price']").val(resData.price);
+		}
+	});
+}
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div class="listTitle">
+			<h2>영화/공연 목록</h2>
+			<button class="btn btn-outline-primary" id="addShowBtn">영화/공연 추가</button>
+		</div>
+	
+			<p th:if="${showList == null}">등록된 영화/공연이 없습니다.</p>
+			
+			<table th:if="${showList != null}" class="table table-hover">
+				<thead id="thead">
+					<tr>
+						<th class="n">번호</th>
+						<th class="t">카테고리</th>
+						<th class="n">제목</th>
+						<th class="n">줄거리</th>
+						<th class="c">감독</th>
+						<th class="d">개봉일</th>
+						<th class="b">상영시간</th>
+						<th class="b">가격</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="show:${showList}" class="showDetail" th:show-code="${show.showCode}" data-toggle="modal" data-target="#myModal" >
+						<td class="n">[[${show.showCode}]]</td>
+						<td class="n">[[${show.category}]]</td>
+						<td class="t">[[${show.showName}]]</td>
+						<td class="n">[[${show.summary}]]</td>
+						<td class="d">[[${show.director}]]</td>
+						<td class="b">[[${show.openingDate}]]</td>
+						<td class="b">[[${show.runningTime}]]</td>
+						<td class="b">[[${show.price}]]</td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+	
+	<!-- 상세보기 모달 -->
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">상세보기 및 수정</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<form class="modalForm modal-body form-group" th:action="@{/admin/updateShow}" method="post" enctype="multipart/form-data">
+					<label>코드</label>
+					<input class="form-control" type="text" id="showCode" name="showCode" readonly="readonly"><br>
+					<label>제목</label>
+					<input class="form-control" type="text" id="showName" name="showName"><br> 
+					<label>감독</label>
+					<input class="form-control" type="text" id="director" name="director"><br>
+					<label>트레일러</label>
+					<input class="form-control" type="text" id="trailer" name="trailer"><br> 
+					<label>개봉일자</label>
+					<input class="form-control" type="date" id="openingDate" name="openingDate"><br> 
+					<label>러닝타임</label> 
+					<input class="form-control" type="number" id="runningTime" name="runningTime"><br>
+					<label>카테고리</label> 
+					<select class="form-control" name="category" id="category" onchange="OnChange()">
+						<option value="영화">영화</option>
+						<option value="공연">공연</option>
+					</select><br> 
+					<label>줄거리</label>
+					<textarea class="form-control" id="summary" name="summary"></textarea><br> 		
+					<label>포스터</label> 
+					<input class="form-control" type="text" id="poster" name="poster" readonly="readonly">
+					<div class="custom-file form-control">
+						<input type="file" class="custom-file-input" id="customFile" name="file"> 
+						<label class="custom-file-label" for="customFile">Choose file</label>
+					</div><br> 
+					<label>가격</label>
+					<input class="form-control" type="text" id="price" name="price" readonly="readonly"><br>
+
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<input class="btn btn-primary" type="submit" value="수정하기">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

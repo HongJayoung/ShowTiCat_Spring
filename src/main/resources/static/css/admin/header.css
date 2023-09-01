@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+/*===========================================================================
+common
+=============================================================================*/
+html,
+body {
+    height: 100%;
+    
+}
+
+html,body,h1,ol,ul,li,div,h2 {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+    
+}
+ul,ol,li{
+    list-style: none;
+ 
+}
+a:hover {
+	color: black;
+    text-decoration: none;
+}
+
+/*===========================================================================
+nav
+=============================================================================*/
+.nav {
+    margin: 70px 0px;
+    height: 65px;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav a {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.nav a:hover {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    text-decoration: none;
+}
+
+.nav li {
+    width: 100%;
+    height: 40px;
+}
+
+.nav_menu {
+    width: 100%;
+    display: inline-flex;
+	margin-top: 8px;
+	display: inline-flex;
+	margin-left: 5px;
+	font-weight: bold;
+}
+
+.header_cont{
+	width: 1000px;
+    height: 100%;
+    margin: 0 auto;
+    padding-top: 13px;
+	display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+/*===========================================================================
+list title
+=============================================================================*/
+
+.listTitle{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+}
