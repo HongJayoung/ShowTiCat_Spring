@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/show/showList.css}" />
+
+<title>ShowTiCat | SHOW</title>
+
+<script>
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h1>[[${category}]] 목록!!!!!</h1>
+		[[${showList}]]
+		<div th:each="show:${showList}" class="box">
+			<div class="poster" th:code="${show.showCode}">
+				<img alt="${show.showName}" th:src="@{/images/${show.poster}}" width="250px" height="335px">
+				<button class="detail btn btn-outline-secondary">상세보기</button>
+			</div>
+			<p class="info name">${show.showName}</p>
+			<p class="info">${show.openingDate} OPEN</p>
+			<button class="reservBtn btn btn-outline-primary btn-sm reservBtn" th:code="${show.showCode}">예매하기</button>
+		</div>
+	</div><!-- contents -->
+</div>
+</body>
+</html>

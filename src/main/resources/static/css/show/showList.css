@@ -1,0 +1,47 @@
+@charset "UTF-8";
+.poster {
+	position: relative;
+	overflow: hidden;
+}
+.poster:hover img{
+	opacity: 0.3;
+}
+.poster .detail {
+	opacity: 0;
+	transform: translateX(-50%) translateY(-50%);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	display: flex;
+	text-align: center;
+	font-weight: bold;
+}
+.poster:hover .detail {
+	opacity: 1;
+}
+.box {
+	border: 1px gray solid;
+	border-radius: 0.25rem;
+	display: inline-block;
+	margin: 20px;
+	padding: 13px;
+}
+.name {
+	font-size: 18px;
+	font-weight: bold;
+}
+.info {
+	margin: 10px 20px 10px 20px;
+	text-align: center;
+	white-space:nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 200px;
+}
+.reservBtn {
+	margin: 0 auto;
+	display:block;
+}
+a:hover {
+	text-decoration: none;
+}
