@@ -1,5 +1,9 @@
 package com.ShowTiCat.controller;
 
+import java.sql.Date;
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +17,12 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ShowTiCat.repository.PlaceRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
 import com.ShowTiCat.repository.ShowRepository;
+import com.ShowTiCat.repository.TheaterRepository;
+import com.ShowTiCat.util.DateUtil;
 import com.ShowTiCat.vo.PlaceVO;
+import com.ShowTiCat.vo.ScheduleVO;
 import com.ShowTiCat.vo.ShowVO;
+import com.ShowTiCat.vo.TheaterVO;
 
 @Controller
 public class AdminController {
@@ -27,6 +35,9 @@ public class AdminController {
 	
 	@Autowired
 	ScheduleRepository scRepo;
+	
+	@Autowired
+	TheaterRepository tRepo;
 	
 	@GetMapping("/ShowTiCat/admin")
 	public String admin() {
@@ -102,9 +113,68 @@ public class AdminController {
 		return "redirect:/ShowTiCat/admin/place";
 	}
 	
+	@GetMapping("/ShowTiCat/admin/theater")
+	public String adminTheater(Model model) {
+		model.addAttribute("placeList", pRepo.findAll());
+		return "/admin/theater";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/getTheaterList/{placeId}")
+	public List<TheaterVO> getTheaterList(@PathVariable Long placeId) {
+		return tRepo.findByPlaceId(placeId);
+	}
+	
+	@PostMapping("/admin/addTheater")
+	public String addTheater(@ModelAttribute TheaterVO theater, Long placeId) {
+		theater.setPlace(pRepo.findById(placeId).get());
+		System.out.println(theater);
+		tRepo.save(theater);
+		return "redirect:/ShowTiCat/admin/theater";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/findTheater/{theaterId}")
+	public TheaterVO findTheater(@PathVariable Long theaterId) {
+		return tRepo.findById(theaterId).get();
+	}
+
+	@PostMapping("/admin/updateTheater")
+	public String updateTheater(@ModelAttribute TheaterVO theater) {
+		TheaterVO t = tRepo.findById(theater.getTheaterId()).get();
+		
+		t.setLastSeat(theater.getLastSeat());
+		t.setTheaterType(theater.getTheaterType());
+		
+		tRepo.save(t);
+		return "redirect:/ShowTiCat/admin/theater";
+	}
+	
 	@GetMapping("/ShowTiCat/admin/schedule")
 	public String adminSchedule(Model model) {
 		model.addAttribute("scheduleList", scRepo.findAll());
+		model.addAttribute("showList", sRepo.findAll());
+		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/schedule";
+	}
+	
+	@PostMapping("/admin/addSchedule")
+	public String addSchedule(String startTime, Long showCode, Long placeId, Long theaterId) {
+		PlaceVO p = pRepo.findById(placeId).get();
+		ShowVO s = sRepo.findById(showCode).get();
+		TheaterVO t = tRepo.findById(theaterId).get();
+		Date d = DateUtil.convertToDateTime(startTime);
+		
+		ScheduleVO schedule = ScheduleVO.builder().place(p).show(s).theater(t).showStart(d).build();
+		System.out.println(schedule);
+		scRepo.save(schedule);
+		
+		return "redirect:/ShowTiCat/admin/schedule";
+	}
+	
+	@ResponseBody
+	@PostMapping("/admin/findSchedule/{scheduleId}")
+	public ScheduleVO findSchedule(@PathVariable Long scheduleId) {
+		return scRepo.findById(scheduleId).get();
 	}
 }
