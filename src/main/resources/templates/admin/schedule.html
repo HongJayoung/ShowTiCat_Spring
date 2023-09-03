@@ -59,6 +59,7 @@ function scheduleDetail() {
 			
 			$("#myModal2 select[name='showCode']").val(resData.show.showCode);
 			$("#myModal2 input[name='placeId']").val(pId);
+			$("#myModal2 input[name='placeName']").val(resData.place.placeName);
 			$("#myModal2 select[name='theaterId']").val(resData.theater.theaterId);
 			$("#myModal2 input[name='showStart']").val(resData.showStart);
 		}
@@ -73,7 +74,7 @@ function scheduleDetail() {
 	<div class="contents">
 		<div class="listTitle">
 			<h2>상영 스케줄</h2>
-			<button class="btn btn-outline-primary" id="addScheduleBtn" data-toggle="modal" data-target="#myModal">
+			<button class="btn btn-outline-showticat" id="addScheduleBtn" data-toggle="modal" data-target="#myModal">
 				스케줄 등록
 			</button>
 		</div>
@@ -133,9 +134,8 @@ function scheduleDetail() {
 					<label>시작시간</label> 
 					<input class="form-control" id="startTime" type="datetime-local" name="startTime">
 					
-					<button class="btn btn-primary" id="submitBtn">등록하기</button>
-					<input class="btn btn-secondary" type="reset" value="리셋"> 
-					<input class="btn btn-secondary" type="button" value="돌아가기" id="return">
+					<button class="btn btn-showticat" id="submitBtn">등록하기</button>
+					<input class="btn btn-outline-showticat" type="reset" value="리셋"> 
 				</form>
 			</div>
 		</div>
@@ -158,7 +158,8 @@ function scheduleDetail() {
 						<option th:each="show:${showList}" th:value="${show.showCode}">[[${show.showName}]]</option>
 					</select>
 					<label>극장 이름</label> 
-					<input class="form-control" id="placeId" type="text" name="placeId" readonly="readonly">
+					<input id="placeId" type="hidden" name="placeId">
+					<input class="form-control" id="placeName" type="text" name="placeName" readonly="readonly">
 					<label>상영관 번호</label>
 					<select class="form-control" id="theaterId" name="theaterId">
 						<option value="">선택하세요</option>
@@ -167,9 +168,7 @@ function scheduleDetail() {
 					<input class="form-control" id="showStart" type="text" name="showStart" readonly="readonly">
 					<input class="form-control" type="time" name="startTime">
 					
-					<button class="btn btn-primary" id="submitBtn">수정하기</button>
-					<input class="btn btn-secondary" type="reset" value="리셋"> 
-					<input class="btn btn-secondary" type="button" value="돌아가기" id="return">
+					<button class="btn btn-showticat" id="submitBtn">수정하기</button>
 				</form>
 			</div>
 		</div>

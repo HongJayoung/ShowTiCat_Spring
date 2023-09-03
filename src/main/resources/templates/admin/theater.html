@@ -12,14 +12,15 @@
 
 <script>
 $(function() {
-	$(".place").on("click", showTheaterList);
-	$("#addTheaterBtn").on("click", addTheater);
+	$(".place").on("click", getTheaterList);
+	$("#addSubmitBtn").on("click", addTheater);
+	$("#updateSubmitBtn").on("click", updateTheater);
 })
 
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 	
-function showTheaterList() {
+function getTheaterList() {
 	$(this).siblings().removeClass("aa");
 	$(this).addClass("aa");
 	
@@ -32,24 +33,10 @@ function showTheaterList() {
 			xhr.setRequestHeader(header, token);
 		},
 		success:function(resData) {
-			var str = "";
-			for(var i = 0;i < resData.length;i++) {
-				str += "<tr class='theaterDetail' onClick='theaterDetail("+ resData[i].theaterId + ")' data-toggle='modal' data-target='#myModal2'>" 
-					+ "<td>" + resData[i].theaterId + "관</td>" 
-					+ "<td>" + resData[i].theaterType + "</td>" 
-					+ "<td>" + resData[i].lastSeat + "석</td></tr>" 
-			}
-			
-			$("#tbody").html(str);
-			$("#addTheaterBtn").attr("place-id", placeId);
+			printList(resData);
+			$("#myModal select[name='placeId']").val(placeId);
 		}
 	})
-}
-	
-function addTheater() {
-	var placeId = $(this).attr("place-id");
-	$("#myModal select[name='placeId']").val(placeId);
-	
 }
 	
 function theaterDetail(theaterId) {
@@ -65,7 +52,76 @@ function theaterDetail(theaterId) {
 			$("#myModal2 input[name='lastSeat']").val(resData.lastSeat);
 		}
 	})
+}
 	
+function addTheater() {
+	var placeId = $("#myModal select[name='placeId']").val();
+	var theaterId = $("#myModal input[name='theaterId']").val();
+	var theaterType = $("#myModal select[name='theaterType']").val();
+	var lastSeat = $("#myModal input[name='lastSeat']").val();
+
+	var obj = {
+		"theaterId" : theaterId,
+		"theaterType" : theaterType,
+		"lastSeat" : lastSeat
+	};
+	
+	$.ajax({
+		type:"post",
+		url: "/admin/addTheater/"+placeId,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		data: JSON.stringify(obj),
+		dataType:"json",
+		contentType: "application/json",
+		success:function(resData) {
+			printList(resData);
+			$("#myModal").hide();
+			$(".modal-backdrop").remove();
+		}
+	})
+}
+	
+function updateTheater() {
+	var theaterId = $("#myModal2 input[name='theaterId']").val();
+	var theaterType = $("#myModal2 select[name='theaterType']").val();
+	var lastSeat = $("#myModal2 input[name='lastSeat']").val();
+
+	var obj = {
+		"theaterId" : theaterId,
+		"theaterType" : theaterType,
+		"lastSeat" : lastSeat
+	};
+	console.log("보내기전");
+	$.ajax({
+		type:"post",
+		url: "/admin/updateTheater",
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		data: JSON.stringify(obj),
+		dataType:"json",
+		contentType: "application/json",
+		success:function(resData) {
+			printList(resData);
+			$("#myModal2").hide();
+			$(".modal-backdrop").remove();
+		}
+	})
+}
+
+function printList(resData) {
+		var str = "";
+		for(var i = 0;i < resData.length;i++) {
+			str += "<tr class='theaterDetail' onClick='theaterDetail("+ resData[i].theaterId + ")' data-toggle='modal' data-target='#myModal2'>" 
+				+ "<td>" + resData[i].theaterId + "관</td>" 
+				+ "<td>" + resData[i].theaterType + "</td>" 
+				+ "<td>" + resData[i].lastSeat + "석</td></tr>" 
+		}
+		
+		$("#tbody").html(str);
+		$("#addTheaterBtn").attr("place-id", placeId);
 }
 </script>
 </head>
@@ -75,7 +131,7 @@ function theaterDetail(theaterId) {
 	<div class="contents">
 		<div class="listTitle">
 			<h2>극장별 상영관 목록</h2>
-			<button class="btn btn-outline-primary" id="addTheaterBtn" place-id="" data-toggle="modal" data-target="#myModal">
+			<button class="btn btn-outline-showticat" id="addTheaterBtn" data-toggle="modal" data-target="#myModal">
 				상영관 추가
 			</button>
 		</div>
@@ -118,7 +174,6 @@ function theaterDetail(theaterId) {
 	
 	      <!-- Modal body -->
 	      <div class="modal-body">
-	      	<form class="modalForm modal-body form-group" th:action="@{/admin/addTheater}" method="post">
 	      		<label>추가하려는 극장명</label>
 					<select class="form-control" name="placeId" id="placeId">
 						<option th:each="place:${placeList}" th:value="${place.placeId}">
@@ -138,10 +193,8 @@ function theaterDetail(theaterId) {
 		
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
-		          <input class="btn btn-primary" type="submit" value="등록하기">
-		          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		          <button class="btn btn-showticat" id="addSubmitBtn">등록하기</button>
 		        </div>
-	      	</form>
 	      </div>
 	
 	    </div>
@@ -160,7 +213,6 @@ function theaterDetail(theaterId) {
 	
 	      <!-- Modal body -->
 	      <div class="modal-body">
-	      	<form class="modalForm modal-body form-group" th:action="@{/admin/updateTheater}" method="post">
 	      		<label>상영관 번호</label>
 				<input class="form-control" type="text" id="theaterId" name="theaterId" readonly="readonly"><br>
 	      		<label>상영관 종류</label>
@@ -175,10 +227,8 @@ function theaterDetail(theaterId) {
 		
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
-		          <input class="btn btn-primary" type="submit" value="수정하기">
-		          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		          <button class="btn btn-showticat" id="updateSubmitBtn">수정하기</button>
 		        </div>
-	      	</form>
 	      </div>
 	
 	    </div>

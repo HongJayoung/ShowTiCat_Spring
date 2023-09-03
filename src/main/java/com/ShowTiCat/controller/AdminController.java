@@ -125,29 +125,10 @@ public class AdminController {
 		return tRepo.findByPlaceId(placeId);
 	}
 	
-	@PostMapping("/admin/addTheater")
-	public String addTheater(@ModelAttribute TheaterVO theater, Long placeId) {
-		theater.setPlace(pRepo.findById(placeId).get());
-		System.out.println(theater);
-		tRepo.save(theater);
-		return "redirect:/ShowTiCat/admin/theater";
-	}
-	
 	@ResponseBody
 	@PostMapping("/admin/findTheater/{theaterId}")
 	public TheaterVO findTheater(@PathVariable Long theaterId) {
 		return tRepo.findById(theaterId).get();
-	}
-
-	@PostMapping("/admin/updateTheater")
-	public String updateTheater(@ModelAttribute TheaterVO theater) {
-		TheaterVO t = tRepo.findById(theater.getTheaterId()).get();
-		
-		t.setLastSeat(theater.getLastSeat());
-		t.setTheaterType(theater.getTheaterType());
-		
-		tRepo.save(t);
-		return "redirect:/ShowTiCat/admin/theater";
 	}
 	
 	@GetMapping("/ShowTiCat/admin/schedule")
