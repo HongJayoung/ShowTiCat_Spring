@@ -21,8 +21,7 @@
 		<h1>[[${category}]] 목록</h1>
 		<div th:each="show:${showList}" class="box">
 			<div class="poster" th:code="${show.showCode}">
-				<img th:alt="${show.poster}" th:src="@{/images/notReady.jpg}">
-<!-- 				<img th:alt="${show.poster}" th:src="@{/images/${show.poster}}"> -->
+				<img th:alt="${show.poster}" th:src="@{/images/}+${show.poster}">
 				<button class="detail btn btn-outline-secondary">상세보기</button>
 			</div>
 			<p class="info name">[[${show.showName}]]</p>

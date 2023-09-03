@@ -20,7 +20,7 @@
 	<div class="contents">
 		<h1>극장 목록</h1>
 		<div id="pList">
-			 <a th:each="p:${placeList}" th:href="@{/place/${p.placeId}}" class="place">
+			 <a th:each="p:${placeList}" th:href="@{/place/}+${p.placeId}" class="place">
 			 	ShowTiCat [[${p.placeName}]]</a>
 		</div>
 		
@@ -37,7 +37,9 @@
 			<div id="map">지도!</div>
 		</div>
 		<hr>
+		<div>날짜</div>
 		<hr>
+		<div>상영스케줄!</div>
 	</div><!-- contents -->
 </div>
 </body>
