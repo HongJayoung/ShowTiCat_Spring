@@ -1,0 +1,40 @@
+@charset "UTF-8";
+
+#pList {
+	display:flex;
+	flex-wrap: wrap;
+    flex-direction: row;
+	line-height: 30px;
+}
+
+.place {
+	margin: 5px 10px;
+}
+
+.place:hover {
+	font-weight: bold;
+}
+
+#infoBox {
+	display:flex;
+	justify-content: space-between;
+}
+
+#box {
+	width: 530px;
+}
+
+.name {
+	display: flex;
+    align-items: center;
+}
+
+.name button{
+	margin: 0 0 0 15px;
+}
+
+#map {
+	width: 450px;
+	height: 300px;
+	border: 3px solid gray; 
+}

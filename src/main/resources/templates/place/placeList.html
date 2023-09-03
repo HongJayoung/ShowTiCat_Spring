@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/place/placeList.css}" />
+
+<title>ShowTiCat | PLACE</title>
+
+<script>
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h1>극장 목록</h1>
+		<div id="pList">
+			 <a th:each="p:${placeList}" th:href="@{/place/${p.placeId}}" class="place">
+			 	ShowTiCat [[${p.placeName}]]</a>
+		</div>
+		
+		<div id="infoBox">
+			<div id="box">
+				<p class="name">
+					ShowTiCat [[${place.placeName}]]
+					<button class="btn btn-outline-showticat btn-sm">관심매장</button>
+				</p>
+				<hr>
+				<p class="info">위치 : [[${place.placeLoc}]]</p>
+				<p class="info">문의 : [[${place.placePhone}]]</p>
+			</div>
+			<div id="map">지도!</div>
+		</div>
+		<hr>
+		<hr>
+	</div><!-- contents -->
+</div>
+</body>
+</html>
