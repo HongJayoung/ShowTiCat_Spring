@@ -1,0 +1,41 @@
+@charset "UTF-8";
+
+ .theatetConts {
+	    height: 80vh;
+	}
+	
+	#theaterCont {
+		display: flex;
+		height: 80%;
+	}
+	
+	#theaterCont li {
+		text-align: center;
+		margin: 10px 0;
+	}
+	
+	#placeList {
+		width: 20%;
+	}
+	
+	.place:hover {
+		cursor: pointer;
+		font-weight: bold;
+		font-size: 17px;
+	}
+	
+	#tList {
+		border-left: 1px solid #eee;
+    	padding-left: 15px;
+    	width: 80%;
+	}
+	
+	.placeName{
+	display: flex;
+	align-items: baseline;
+	}
+	
+	.aa{
+	font-weight: bold;
+	font-size: 17px;
+	}

@@ -51,7 +51,7 @@ function showDetail() {
 	<div class="contents">
 		<div class="listTitle">
 			<h2>영화/공연 목록</h2>
-			<button class="btn btn-outline-primary" id="addShowBtn">영화/공연 추가</button>
+			<button class="btn btn-outline-showticat" id="addShowBtn">영화/공연 추가</button>
 		</div>
 	
 			<p th:if="${showList == null}">등록된 영화/공연이 없습니다.</p>
@@ -127,8 +127,7 @@ function showDetail() {
 
 					<!-- Modal footer -->
 					<div class="modal-footer">
-						<input class="btn btn-primary" type="submit" value="수정하기">
-						<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+						<input class="btn btn-showticat" type="submit" value="수정하기">
 					</div>
 				</form>
 			</div>

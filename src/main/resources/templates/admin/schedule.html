@@ -8,6 +8,65 @@
 
 <title>ShowTiCat</title>
 
+<script>
+$(function() {
+	$("#addScheduleBtn").click(getTheaterList);
+	$(".changePlace").change(getTheaterList);
+	$(".scheduleDetail").click(scheduleDetail);
+})
+
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+	
+function getTheaterList() {
+	var placeId = $("#placeId").val();
+	getList(placeId, "#myModal #theaterId");
+}
+	
+function getList(placeId, list) {
+	$.ajax({
+		type:"post",
+		url: "/admin/getTheaterList/"+placeId,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success:function(resData) {
+			var str = "";
+			for(var i = 0;i < resData.length;i++) {
+				str += "<option value = '"+ resData[i].theaterId + "'>"
+					+ resData[i].theaterId + "관 - " + resData[i].theaterType
+					+ "</option>"
+			}
+			
+			$(list).html(str);
+		}
+	})
+	
+}
+	
+function scheduleDetail() {
+	var scheduleId = $(this).attr("schedule-id");
+
+	$.ajax({
+		type:"post",
+		url: "/admin/findSchedule/"+scheduleId,
+		beforeSend : function(xhr){
+			xhr.setRequestHeader(header, token);
+		},
+		success:function(resData) {
+			var pId = resData.place.placeId;
+			getList(pId, "#myModal2 #theaterId");
+			
+			$("#myModal2 select[name='showCode']").val(resData.show.showCode);
+			$("#myModal2 input[name='placeId']").val(pId);
+			$("#myModal2 input[name='placeName']").val(resData.place.placeName);
+			$("#myModal2 select[name='theaterId']").val(resData.theater.theaterId);
+			$("#myModal2 input[name='showStart']").val(resData.showStart);
+		}
+	})
+	
+}
+</script>
 </head>
 
 <body>
@@ -15,12 +74,105 @@
 	<div class="contents">
 		<div class="listTitle">
 			<h2>상영 스케줄</h2>
-			<button class="btn btn-outline-primary" id="addScheduleBtn" data-toggle="modal" data-target="#myModal">
+			<button class="btn btn-outline-showticat" id="addScheduleBtn" data-toggle="modal" data-target="#myModal">
 				스케줄 등록
 			</button>
 		</div>
+		
+		<table th:if="${scheduleList != null}" class="table table-hover">
+				<thead id="thead">
+					<tr>
+						<th>번호</th>
+						<th>영화/공연 제목</th>
+						<th>극장</th>
+						<th>상영관</th>
+						<th>상영관 종류</th>
+						<th>상영일</th>
+						<th>시작 시간</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="schedule:${scheduleList}" class="scheduleDetail" th:schedule-id="${schedule.scheduleId}" data-toggle="modal" data-target="#myModal2">
+						<td>[[${schedule.scheduleId}]]</td>
+						<td>[[${schedule.show.showName}]]</td>
+						<td>[[${schedule.theater.theaterId}]]관</td>
+						<td>[[${schedule.theater.theaterType}]]</td>
+						<td>[[${schedule.place.placeName}]]</td>
+						<td th:text="${#dates.format(schedule.showStart, 'yyyy-MM-dd')}"></td>
+						<td th:text="${#dates.format(schedule.showStart, 'HH:mm')}"></td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
 	</div>
 	
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">상영스케줄 추가</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<form class="modalForm modal-body form-group" th:action="@{/admin/addSchedule}" method="post">
+					<label>영화/공연 제목</label> 
+					<select class="form-control" id="showCode" name="showCode">
+						<option th:each="show:${showList}" th:value="${show.showCode}">[[${show.showName}]]</option>
+					</select>
+					<label>극장 이름</label> 
+					<select class="form-control changePlace" id="placeId" name="placeId">
+						<option class="selectedPlace" th:each="place:${placeList}" th:value="${place.placeId}">ShowTiCat [[${place.placeName}]]</option>
+					</select>
+					<label>상영관 번호</label>
+					<select class="form-control" id="theaterId" name="theaterId">
+						<option value="">선택하세요</option>
+					</select>
+					<label>시작시간</label> 
+					<input class="form-control" id="startTime" type="datetime-local" name="startTime">
+					
+					<button class="btn btn-showticat" id="submitBtn">등록하기</button>
+					<input class="btn btn-outline-showticat" type="reset" value="리셋"> 
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal" id="myModal2">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">상영스케줄 수정</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<form class="modalForm modal-body form-group" th:action="@{/admin/updateSchedule}" method="post">
+					<label>영화/공연 제목</label> 
+					<select class="form-control" id="showCode" name="showCode">
+						<option th:each="show:${showList}" th:value="${show.showCode}">[[${show.showName}]]</option>
+					</select>
+					<label>극장 이름</label> 
+					<input id="placeId" type="hidden" name="placeId">
+					<input class="form-control" id="placeName" type="text" name="placeName" readonly="readonly">
+					<label>상영관 번호</label>
+					<select class="form-control" id="theaterId" name="theaterId">
+						<option value="">선택하세요</option>
+					</select>
+					<label>시작시간</label> 
+					<input class="form-control" id="showStart" type="text" name="showStart" readonly="readonly">
+					<input class="form-control" type="time" name="startTime">
+					
+					<button class="btn btn-showticat" id="submitBtn">수정하기</button>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

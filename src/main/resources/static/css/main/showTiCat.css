@@ -56,3 +56,27 @@ container
  
 }
 
+/******************* button *******************/
+.btn-showticat {
+	color: #fff;
+    background-color: #1e7e34;
+    border-color: #1e7e34;
+}
+
+.btn-showticat:hover {
+	color: #fff;
+	background-color: #186529;
+    border-color: #186529;
+}
+	
+.btn-outline-showticat {
+	color: #1e7e34;
+    background-color: #fff;
+    border: 2px solid #1e7e34;
+}
+
+.btn-outline-showticat:hover {
+	color: #fff;
+	background-color: #1e7e34;
+    border-color: #1e7e34;
+}

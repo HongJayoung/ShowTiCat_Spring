@@ -75,16 +75,14 @@
                     </li>
                     <li>
                         <h2>
-	                        <th:if test="${session.member == null || session.member.place_num == 0}">
-	                        	<a href="${path}/jayoung/placeDetail.do?place_num=1020&date=${sysdate}" id="theaterList">극장</a>
-	                        </th:if>
+	                       <a th:href="@{/place/15}" id="theaterList">극장</a>
 	                       <!--  <th:if test="${session.member != null && session.member.place_num != 0}">
 	                        	<a href="${path}/jayoung/placeDetail.do?place_num=${member.place_num}&date=${sysdate}" id="theaterList">극장</a>
 	                        </th:if> -->
                         </h2>
                     </li>
                     <li>
-                        <h2><a href="${path}/jayoung/reservationFirst.do" id="reservation">예매</a></h2>
+                        <h2><a th:href="@{/reservation}" id="reservation">예매</a></h2>
                     </li>
                     <li></li>
                     <li></li>
@@ -109,10 +107,23 @@
     </div><!-- header -->
 
 <!-- 관리자 페이지 header -->
-<div th:fragment="header2">
+<div th:fragment="header2" class="header">
+        
+	<div class="headerContents">
+            <div class="contents">
+                <!-- 로고 및 사이트 이름 -->
+                <h3>ADMIN PAGE</h3>
+                <h1>
+                    <a th:href="@{/ShowTiCat}">
+	                    <img th:src="@{/images/showticat_logo.png}" alt="ShowTiCat">
+	                    <!-- 사이트 이름 -->
+                    </a>
+                </h1>
+    	</div>
+	</div>
 	
         <div class="nav">
-            <div class="header_cont">
+            <div class="contents">
                 <ul class="nav_menu">
                     <li>
                         <h2><a th:href="@{/ShowTiCat/admin/show}" id="show">영화/공연</a></h2>
@@ -129,15 +140,9 @@
                     <li></li>
                     <li></li>
                 </ul>
-		        <!-- 로고 및 사이트 이름 -->
-		        <h1>
-		        	<a th:href="@{/ShowTiCat}">
-			        	<img th:src="@{/images/showticat_logo.png}" alt="ShowTiCat">
-			            <!-- 사이트 이름 -->
-		            </a>
-		       </h1>
             </div><!-- contens -->
         </div><!-- nav -->
+                
 </div>
 </body>
 </html>

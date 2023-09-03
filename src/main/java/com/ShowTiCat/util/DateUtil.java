@@ -26,11 +26,11 @@ public class DateUtil {
 		//strdate = 2022-06-23T00:26
 		
 		int index = strdate.indexOf("T");
-		//System.out.println(index);
+		System.out.println(index);
 		String dstr  = strdate.substring(0,index);
 		String tstr = strdate.substring(index+1,16);
-		//System.out.println(dstr);
-		//System.out.println(tstr);
+		System.out.println(dstr);
+		System.out.println(tstr);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		java.util.Date d;
