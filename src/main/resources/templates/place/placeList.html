@@ -11,7 +11,37 @@
 <title>ShowTiCat | PLACE</title>
 
 <script>
+$(function() {
+	$("#thisWeek").html(getDate);
+})
 
+function getDate() {
+	var day = new Date();
+	var dd = changeFormat(day);
+	var today = Date.parse(day);
+	
+	var str = "<button class='btn btn-light' onClick='getSchedule("+ dd +")'>" + dd + "</button>";
+	
+	for (var i=0; i<7; i++) {
+	    today += 86400000;
+	    var d = changeFormat(new Date(today));
+	    str += "<button class='btn btn-light' onClick='getSchedule("+ d +")'>" + d + "</button>";
+	}
+
+  return str;
+}
+
+function changeFormat(d) {
+	var date = d.getFullYear() + "-" 
+			+ ((d.getMonth()+1)<=9?"0" + (d.getMonth()+1):(d.getMonth()+1)) + "-"
+			+ ((d.getDate()+1)<=9?"0" + (d.getDate()+1):(d.getDate()+1));
+			
+	return date;
+}
+
+function getSchedule(day) {
+	console.log(day);
+}
 </script>
 </head>
 
@@ -37,7 +67,7 @@
 			<div id="map">지도!</div>
 		</div>
 		<hr>
-		<div>날짜</div>
+		<div id="thisWeek"></div>
 		<hr>
 		<div>상영스케줄!</div>
 	</div><!-- contents -->
