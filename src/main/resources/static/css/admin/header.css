@@ -96,3 +96,13 @@ nav
     width: 100%;
     display: inline-flex;
 }
+
+/*===========================================================================
+list title
+=============================================================================*/
+
+.listTitle{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 12px;
+}

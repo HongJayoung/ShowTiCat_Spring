@@ -1,5 +1,6 @@
 package com.ShowTiCat.controller;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.ShowTiCat.repository.PlaceRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
 import com.ShowTiCat.repository.ShowRepository;
 import com.ShowTiCat.repository.TheaterRepository;
+import com.ShowTiCat.util.AwsS3;
 import com.ShowTiCat.util.DateUtil;
 import com.ShowTiCat.vo.PlaceVO;
 import com.ShowTiCat.vo.ScheduleVO;
@@ -38,6 +40,9 @@ public class AdminController {
 	
 	@Autowired
 	TheaterRepository tRepo;
+	
+	@Autowired
+	AwsS3 s3;
 	
 	@GetMapping("/ShowTiCat/admin")
 	public String admin() {
@@ -61,8 +66,9 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/addShow")
-	public String addShow(@ModelAttribute ShowVO show, MultipartFile file) {
-		//파일 처리
+	public String addShow(@ModelAttribute ShowVO show, MultipartFile file) throws IOException {
+		String img = s3.upload(file, "uploads/showImg/");
+		show.setPoster(img);
 		sRepo.save(show);
 		return "redirect:/ShowTiCat/admin/show";
 	}
