@@ -1,0 +1,36 @@
+@charset "UTF-8";
+.left {
+	float: left;
+}
+.poster {
+	padding: 20px;
+}
+.title {
+	padding-top: 20px;
+	font-size: 30px;
+	font-weight: bold;
+}
+
+.trailerBtn, #reservBtn {
+	margin-top: 70px;
+	margin-right: 20px;
+}
+.url {
+	color: black;
+}
+.modal-body {
+	margin: 0 auto;
+}
+.summary {
+	padding: 5px 0px 5px 20px;
+	font-size: 17px;
+	overflow: auto;
+	white-space : pre-wrap;
+	word-break: break-all;
+}
+.ti {
+	padding: 5px 0px 5px 20px;
+}
+hr {
+	clear: both;
+}
