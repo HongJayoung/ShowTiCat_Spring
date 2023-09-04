@@ -74,8 +74,16 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/updateShow")
-	public String updateShow(@ModelAttribute ShowVO show, MultipartFile file) {
+	public String updateShow(@ModelAttribute ShowVO show, MultipartFile file) throws IOException {
 		ShowVO s = sRepo.findById(show.getShowCode()).get();
+		
+		if(!file.isEmpty()) {
+			s3.delete(s.getPoster()); //s3에서 이미지 삭제
+			
+			String img = s3.upload(file, "uploads/showImg/");
+			s.setPoster(img);
+		 }
+		 
 		s.setCategory(show.getCategory());
 		s.setDirector(show.getDirector());
 		s.setOpeningDate(show.getOpeningDate());
@@ -153,7 +161,6 @@ public class AdminController {
 		Date d = DateUtil.convertToDateTime(startTime);
 		
 		ScheduleVO schedule = ScheduleVO.builder().place(p).show(s).theater(t).showStart(d).build();
-		System.out.println(schedule);
 		scRepo.save(schedule);
 		
 		return "redirect:/ShowTiCat/admin/schedule";

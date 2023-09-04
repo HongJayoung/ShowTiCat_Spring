@@ -12,6 +12,12 @@
 $(function() {
 	$("#addShowBtn").on("click", addShow);
 	$(".showDetail").on("click", showDetail);
+	
+	//파일 업로더 label
+	$(".custom-file-input").on("change",function() {
+		var fileName = $(this).val().split("\\").pop();
+		$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+	});
 })
 
 var token = $("meta[name='_csrf']").attr("content");
@@ -38,8 +44,9 @@ function showDetail() {
 			$("input[name='runningTime']").val(resData.runningTime);
 			$("select[name='category']").val(resData.category);
 			$("textarea[name='summary']").val(resData.summary);
-			$("input[name='poster']").val(resData.poster);
+			$("input[name='poster']").val(resData.poster.substring(103));
 			$("input[name='price']").val(resData.price);
+			$("input[name='trailer']").val(resData.trailer);
 		}
 	});
 }
