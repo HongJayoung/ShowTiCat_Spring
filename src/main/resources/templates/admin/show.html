@@ -8,6 +8,8 @@
 
 <title>ShowTiCat</title>
 
+<link rel="stylesheet" th:href="@{/css/admin/show.css}" />
+
 <script>
 $(function() {
 	$("#addShowBtn").on("click", addShow);
@@ -47,26 +49,26 @@ function showDetail() {
 			<table th:if="${showList != null}" class="table table-hover">
 				<thead id="thead">
 					<tr>
-						<th class="n">번호</th>
-						<th class="t">카테고리</th>
+						<th class="ct">번호</th>
+						<th class="c">카테고리</th>
 						<th class="n">제목</th>
-						<th class="n">줄거리</th>
-						<th class="c">감독</th>
-						<th class="d">개봉일</th>
-						<th class="b">상영시간</th>
-						<th class="b">가격</th>
+						<th class="s">줄거리</th>
+						<th class="d">감독</th>
+						<th class="t">개봉일</th>
+						<th class="t">상영시간</th>
+						<th class="p">가격</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="show:${showList}" class="showDetail" th:show-code="${show.showCode}">
-						<td class="n">[[${show.showCode}]]</td>
-						<td class="n">[[${show.category}]]</td>
-						<td class="t">[[${show.showName}]]</td>
-						<td class="n">[[${show.summary}]]</td>
+						<td class="ct">[[${showStat.count}]]</td>
+						<td class="c">[[${show.category}]]</td>
+						<td class="n">[[${show.showName}]]</td>
+						<td class="s">[[${show.summary}]]</td>
 						<td class="d">[[${show.director}]]</td>
-						<td class="b">[[${show.openingDate}]]</td>
-						<td class="b">[[${show.runningTime}]]</td>
-						<td class="b">[[${show.price}]]</td>
+						<td class="t">[[${show.openingDate}]]</td>
+						<td class="t">[[${show.runningTime}]]</td>
+						<td class="p">[[${show.price}]]</td>
 					</tr>
 				</tbody>
 			</table>

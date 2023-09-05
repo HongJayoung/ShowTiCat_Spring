@@ -25,23 +25,11 @@
 			<p class="info">감독 : [[${show.director}]]</p>
 			<p class="info">배우 : 
 			<th:block th:each="cast:${castList}">
-				<a th:if="${castStat.last}" th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.cast.castDetail.castUrl}" target="_blank">
+				<a th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.cast.castDetail.castUrl}" target="_blank">
 					[[${cast.cast.castDetail.castName}]]
 				</a>
-				<a th:if="${!castStat.last}" th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.cast.castDetail.castUrl}" target="_blank">
-					[[${cast.cast.castDetail.castName}]]
-				</a>
+				<th:block th:if="${!castStat.last}">, </th:block>
 			</th:block>
-				<!-- <c:forEach items="${castList}" var="cast" varStatus="s">
-					<c:if test="${s.last==false&&cast.cast_url!=null}">
-						<a href="${cast.cast_url}" class="url" target="_blank">${cast.cast_name}</a>,
-					</c:if>
-					<c:if test="${s.last&&cast.cast_url!=null}">
-						<a href="${cast.cast_url}" class="url" target="_blank">${cast.cast_name}</a>
-					</c:if>
-					<c:if test="${s.last==false&&cast.cast_url==null}">${cast.cast_name},</c:if>
-					<c:if test="${s.last&&cast.cast_url==null}">${cast.cast_name}</c:if>
-				</c:forEach> -->
 			</p>
 			<p class="info">상영시간 : [[${show.runningTime}]]분</p>
 			<p class="info">개봉일 : [[${show.openingDate}]]</p>
@@ -72,7 +60,7 @@
 		      
 		      <!-- Modal body -->
 		      <div class="modal-body">
-		        <iframe width="700" height="395" th:src="@{https://www.youtube.com/embed/}+${show.trailer}"
+		        <iframe width="700" height="395" th:src="@{https://www.youtube.com/embed/}+${show.trailer}+@{?autoplay=1&mute=1}"
 		        	title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 		      </div>
 		    </div>

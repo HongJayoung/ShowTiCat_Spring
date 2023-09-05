@@ -64,7 +64,7 @@ function placeDetail() {
 			</thead>
 			<tbody>
 				<tr th:each="place:${placeList}" class="placeDetail" th:place-id="${place.placeId}" data-toggle="modal" data-target="#myModal2">
-					<td>[[${place.placeId}]]</td>
+					<td>[[${placeStat.count}]]</td>
 					<td>[[${place.placeName}]]</td>
 					<td>[[${place.placeLoc}]]</td>
 					<td>[[${place.placePhone}]]</td>
