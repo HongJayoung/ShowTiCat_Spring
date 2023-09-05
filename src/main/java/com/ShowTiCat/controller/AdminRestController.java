@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ShowTiCat.repository.CastDetailRepository;
 import com.ShowTiCat.repository.PlaceRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
 import com.ShowTiCat.repository.ShowRepository;
 import com.ShowTiCat.repository.TheaterRepository;
+import com.ShowTiCat.vo.CastDetailVO;
 import com.ShowTiCat.vo.TheaterVO;
 
 @RestController
@@ -29,6 +31,9 @@ public class AdminRestController {
 	@Autowired
 	TheaterRepository tRepo;
 	
+	@Autowired
+	CastDetailRepository cdRepo;
+	
 	@PostMapping("/admin/addTheater/{placeId}")
 	public List<TheaterVO> addTheater(@RequestBody TheaterVO theater, @PathVariable Long placeId) {
 		theater.setPlace(pRepo.findById(placeId).get());
@@ -45,6 +50,12 @@ public class AdminRestController {
 		
 		tRepo.save(t);
 		return tRepo.findByPlaceId(t.getPlace().getPlaceId());
+	}
+	
+	@PostMapping("/admin/addCast")
+	public List<CastDetailVO> addCast(@RequestBody CastDetailVO castDetail) {
+		cdRepo.save(castDetail);
+		return (List<CastDetailVO>) cdRepo.findAll();
 	}
 
 }
