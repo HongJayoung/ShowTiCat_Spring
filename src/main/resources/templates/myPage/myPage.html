@@ -86,9 +86,7 @@ function delMyPlace() {
 						<div class="form-group">
 						    <label for="sel1">매장 선택</label>
 						    <select class="form-control" name="place_num">
-						    	<th:forEach items="${placeList}" var="place">
-									<option value="${place.placeId}">ShowTiCat ${place.placeName}</option>        
-								</th:forEach>
+								<option th:each="place:${placeList}" value="${place.placeId}">ShowTiCat [[${place.placeName}]]</option>        
 						    </select>
 							<input class="btn btn-outline-primary" type="submit" value="등록">
 							<input class="btn btn-outline-primary resetBtn" type="reset" value="취소">
@@ -99,7 +97,7 @@ function delMyPlace() {
 
 				</div><!-- myPlace -->
 
-				<div class="myPoint">
+				<div class="myPointBox">
 					<h2>M Y P O I N T</h2>
 					<div class="pointText">
 			 		<span>ShowTicat Point</span>

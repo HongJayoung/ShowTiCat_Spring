@@ -47,7 +47,6 @@ function updateReview() {
 		<div th:replace="~{/myPage/side}"></div>
 		<div class="centerHidden">
 			<h2>MY REVIEW</h2>
-			[[${reviewList}]]
 			<p th:if="${reviewList == null}">등록한 리뷰가 없습니다.</p>
 			
 			<table th:if="${reviewList != null}" class="table">

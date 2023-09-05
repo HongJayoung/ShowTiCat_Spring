@@ -25,12 +25,12 @@
 			<p class="info">감독 : [[${show.director}]]</p>
 			<p class="info">배우 : 
 			<th:block th:each="cast:${castList}">
-				<a th:if="${castStat.last}" th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.castUrl}" target="_blank">
-					[[${cast.castName}]]
+				<a th:if="${castStat.last}" th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.cast.castDetail.castUrl}" target="_blank">
+					[[${cast.cast.castDetail.castName}]]
 				</a>
-				<a th:if="${!castStat.last}" th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.castUrl}" target="_blank">
-					[[${cast.castName}]]
-				</a>,
+				<a th:if="${!castStat.last}" th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.cast.castDetail.castUrl}" target="_blank">
+					[[${cast.cast.castDetail.castName}]]
+				</a>
 			</th:block>
 				<!-- <c:forEach items="${castList}" var="cast" varStatus="s">
 					<c:if test="${s.last==false&&cast.cast_url!=null}">
