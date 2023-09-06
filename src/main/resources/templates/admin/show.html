@@ -43,9 +43,6 @@ function showDetail() {
 			<h2>영화/공연 목록</h2>
 			<button class="btn btn-outline-showticat" id="addShowBtn">영화/공연 추가</button>
 		</div>
-	
-			<p th:if="${showList == null}">등록된 영화/공연이 없습니다.</p>
-			
 			<table th:if="${showList != null}" class="table table-hover">
 				<thead id="thead">
 					<tr>

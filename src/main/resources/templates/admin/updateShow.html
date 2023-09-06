@@ -11,10 +11,10 @@
 <script>
 $(function() {
 	$("#category").on("change", changePrice);
-	$("#resetBtn").on("click", reset);
-	$("#returnBtn").on("click", goBack);
 	$("#addcast").on("click", addcast);
 	$("#newCast").on("click", newCast);
+	$("#deleteBtn").on("click", deleteShow);
+	$("#returnBtn").on("click", goBack);
 	
 	//파일 업로더 label
 	$(".custom-file-input").on("change",function() {
@@ -37,14 +37,6 @@ function changePrice() {
 
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-
-function reset() {
-	$("#fileName").html("Choose file");
-}
-
-function goBack() {
-	location.href="/ShowTiCat/admin/show";
-}
 
 function addcast() {
 	$("#myModal").hide();
@@ -89,6 +81,32 @@ function printList(resData) {
 	}
 
 	$("#getCast").html(str);
+}
+
+function deleteShow() {
+	if(confirm("정말 삭제하시겠습니까?\n삭제된 정보는 복구되지않습니다.")) {
+		var showCode = $("input[name='showCode']").val();
+		
+		$.ajax({
+			type:"delete",
+			url: "/admin/deleteShow/"+showCode,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success:function(resData) {
+				if(resData == "") {
+					alert("영화/공연이 삭제되었습니다.")
+					location.href="/ShowTiCat/admin/show";
+				}else{
+					alert(resData);
+				}
+			}
+		});
+	}
+}
+
+function goBack() {
+	location.href="/ShowTiCat/admin/show";
 }
 </script>
 	
@@ -154,7 +172,7 @@ function printList(resData) {
 				<input class="form-control" type="number" name="price" readonly="readonly" id="price" th:value="${show.price}">
 			</div>
 			<input class="btn btn-showticat" type="submit" value="수정"> 
-			<input class="btn btn-outline-showticat" type="reset" value="리셋" id="resetBtn"> 
+			<input class="btn btn-outline-showticat" type="button" value="삭제" id="deleteBtn"> 
 			<input class="btn btn-outline-showticat" type="button" value="돌아가기" id="returnBtn">
 		</form>
 	</div>

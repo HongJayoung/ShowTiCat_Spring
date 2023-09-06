@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ShowTiCat.repository.CastDetailRepository;
 import com.ShowTiCat.repository.CastRepository;
 import com.ShowTiCat.repository.PlaceRepository;
+import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
 import com.ShowTiCat.repository.ShowRepository;
 import com.ShowTiCat.repository.TheaterRepository;
@@ -54,6 +57,9 @@ public class AdminController {
 	CastRepository cRepo;
 	
 	@Autowired
+	ReservationRepository rRepo;
+	
+	@Autowired
 	AwsS3 s3;
 	
 	@GetMapping("/ShowTiCat/admin")
@@ -67,20 +73,8 @@ public class AdminController {
 		return "/admin/show";
 	}
 	
-	@ResponseBody
-	@PostMapping("/admin/findShow/{showCode}")
-	public ShowVO findShow(@PathVariable Long showCode) {
-		return sRepo.findById(showCode).get();
-	}
-	
 	@GetMapping("/admin/addShow")
 	public void showAddPage() {
-	}
-	
-	@ResponseBody
-	@PostMapping("/admin/getCastList")
-	public List<CastDetailVO> getCastList() {
-		return (List<CastDetailVO>) cdRepo.findAll();
 	}
 	
 	@PostMapping("/admin/addShow")
@@ -120,7 +114,7 @@ public class AdminController {
 		model.addAttribute("cast", cRepo.findAll());
 		return "/admin/updateShow";
 	}
-	
+
 	@PostMapping("/admin/updateShow")
 	public String updateShow(@ModelAttribute ShowVO show, MultipartFile file) throws IOException {
 		ShowVO s = sRepo.findById(show.getShowCode()).get();
@@ -157,12 +151,7 @@ public class AdminController {
 		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/place";
 	}
-	
-	@ResponseBody
-	@PostMapping("/admin/findPlace/{placeId}")
-	public PlaceVO findPlace(@PathVariable Long placeId) {
-		return pRepo.findById(placeId).get();
-	}
+
 	
 	@PostMapping("/admin/addPlace")
 	public String addPlace(@ModelAttribute PlaceVO place) {
@@ -187,22 +176,10 @@ public class AdminController {
 		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/theater";
 	}
-	
-	@ResponseBody
-	@PostMapping("/admin/getTheaterList/{placeId}")
-	public List<TheaterVO> getTheaterList(@PathVariable Long placeId) {
-		return tRepo.findByPlaceId(placeId);
-	}
-	
-	@ResponseBody
-	@PostMapping("/admin/findTheater/{theaterId}")
-	public TheaterVO findTheater(@PathVariable Long theaterId) {
-		return tRepo.findById(theaterId).get();
-	}
-	
+
 	@GetMapping("/ShowTiCat/admin/schedule")
 	public String adminSchedule(Model model) {
-		model.addAttribute("scheduleList", scRepo.findAll());
+		model.addAttribute("scheduleList", scRepo.findAllByOrderByShowStart());
 		model.addAttribute("showList", sRepo.findAll());
 		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/schedule";
@@ -220,13 +197,7 @@ public class AdminController {
 		
 		return "redirect:/ShowTiCat/admin/schedule";
 	}
-	
-	@ResponseBody
-	@PostMapping("/admin/findSchedule/{scheduleId}")
-	public ScheduleVO findSchedule(@PathVariable Long scheduleId) {
-		return scRepo.findById(scheduleId).get();
-	}
-	
+
 	@PostMapping("/admin/updateSchedule")
 	public String updateSchedule(Long scheduleId, Long showCode, Long theaterId, String startTime) {
 		ScheduleVO schedule = scRepo.findById(scheduleId).get();

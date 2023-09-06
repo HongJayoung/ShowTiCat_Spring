@@ -18,6 +18,7 @@
 <script>
 $(function() {
 	$(".placeDetail").on("click", placeDetail);
+	$("#deleteBtn").on("click", deletePlace);
 })
 
 var token = $("meta[name='_csrf']").attr("content");
@@ -39,6 +40,28 @@ function placeDetail() {
 			$("#myModal2 input[name='placePhone']").val(resData.placePhone);
 		}
 	});
+}
+
+function deletePlace() {
+	if(confirm("정말 삭제하시겠습니까?\n삭제된 정보는 복구되지않습니다.")) {
+		var placeId = $("#myModal2 input[name='placeId']").val();
+		
+		$.ajax({
+			type:"delete",
+			url: "/admin/deletePlace/"+placeId,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success:function(resData) {
+				if(resData == "") {
+					alert("극장이 삭제되었습니다.")
+					location.href="/ShowTiCat/admin/place";
+				}else{
+					alert(resData);
+				}
+			}
+		});
+	}
 }
 </script>
 </head>
@@ -128,8 +151,8 @@ function placeDetail() {
 		
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
-		          <input class="btn btn-primary" type="submit" value="수정하기">
-		          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		          <input class="btn btn-showticat" type="submit" value="수정하기">
+		          <button class="btn btn-outline-showticat" id="deleteBtn" type="button">삭제</button>
 		        </div>
 	      	</form>
 	      </div>

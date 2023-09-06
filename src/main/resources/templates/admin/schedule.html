@@ -13,6 +13,7 @@ $(function() {
 	$("#addScheduleBtn").click(getTheaterList);
 	$(".changePlace").change(getTheaterList);
 	$(".scheduleDetail").click(scheduleDetail);
+	$("#deleteBtn").click(deleteSchedule);
 })
 
 var token = $("meta[name='_csrf']").attr("content");
@@ -63,10 +64,31 @@ function scheduleDetail() {
 			$("#myModal2 input[name='placeName']").val(resData.place.placeName);
 			$("#myModal2 select[name='theaterId']").val(resData.theater.theaterId).prop("selected",true);
 			$("#myModal2 input[name='showStart']").val(resData.showStart);
-			alert(resData.theater.theaterId);
 		}
 	})
 	
+}
+
+function deleteSchedule() {
+	if(confirm("정말 삭제하시겠습니까?\n삭제된 정보는 복구되지않습니다.")) {
+		var scheduleId = $("input[name='scheduleId']").val();
+		
+		$.ajax({
+			type:"delete",
+			url: "/admin/deleteSchedule/"+scheduleId,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success:function(resData) {
+				if(resData == "") {
+					alert("스케줄이 삭제되었습니다.")
+					location.href="/ShowTiCat/admin/schedule";
+				}else{
+					alert(resData);
+				}
+			}
+		});
+	}
 }
 </script>
 </head>
@@ -96,11 +118,11 @@ function scheduleDetail() {
 				</thead>
 				<tbody>
 					<tr th:each="schedule:${scheduleList}" class="scheduleDetail" th:schedule-id="${schedule.scheduleId}" data-toggle="modal" data-target="#myModal2">
-						<td>[[${schedule.scheduleId}]]</td>
+						<td>[[${scheduleStat.count}]]</td>
 						<td>[[${schedule.show.showName}]]</td>
+						<td>[[${schedule.place.placeName}]]</td>
 						<td>[[${schedule.theater.theaterId}]]관</td>
 						<td>[[${schedule.theater.theaterType}]]</td>
-						<td>[[${schedule.place.placeName}]]</td>
 						<td th:text="${#dates.format(schedule.showStart, 'yyyy-MM-dd')}"></td>
 						<td th:text="${#dates.format(schedule.showStart, 'HH:mm')}"></td>
 						<td></td>
@@ -170,6 +192,7 @@ function scheduleDetail() {
 					<input class="form-control" type="time" name="startTime">
 					
 					<button class="btn btn-showticat" id="submitBtn">수정하기</button>
+					<button class="btn btn-outline-showticat" type="button" id="deleteBtn">삭제</button>
 				</form>
 			</div>
 		</div>
