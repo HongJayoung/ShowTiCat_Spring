@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.ShowTiCat.repository.MemberRepository;
+import com.ShowTiCat.repository.PointRepository;
 import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ReviewRepository;
 import com.ShowTiCat.vo.MemberVO;
@@ -25,6 +26,9 @@ public class MemberController {
 	@Autowired
 	ReviewRepository rRepo;
 	
+	@Autowired
+	PointRepository pRepo;
+	
 	@GetMapping("/myPage")
 	public String myPage() {
 		return "/myPage/myPage";
@@ -36,14 +40,20 @@ public class MemberController {
 		model.addAttribute("reservList", reRepo.findByMemberId(m.getMemberId()));
 	}
 	
+	@GetMapping("/myPage/myPoint")
+	public void myPoint(HttpSession session, Model model) {
+		MemberVO m = (MemberVO) session.getAttribute("member");
+		model.addAttribute("pointDetail", pRepo.findByMemberId(m.getMemberId()));
+	}
+	
 	@GetMapping("/myPage/myReview")
 	public void myReview(HttpSession session, Model model) {
 		MemberVO m = (MemberVO) session.getAttribute("member");
 		model.addAttribute("reviewList", rRepo.findByMemberId(m.getMemberId()));
 	}
 	
-	@GetMapping("/myPage/updateInfo")
-	public void updateInfo() {
+	@GetMapping("/myPage/myInfo")
+	public void myInfo() {
 	}
 	
 	@GetMapping("/myPage/deleteAccount")

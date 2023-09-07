@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.table {
+	table-layout: fixed;
+}
+.ct {
+	width: 7%;
+}
+
+ .n, .d {
+	width: 10%;
+}
+
+.s {
+	width: 40%;
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.c, .t, .p {
+	width: 13%;
+}
+	
+.showDetail:hover {
+	cursor: pointer;
+}

@@ -5,7 +5,10 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +18,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ShowTiCat.repository.CastDetailRepository;
+import com.ShowTiCat.repository.CastRepository;
 import com.ShowTiCat.repository.PlaceRepository;
+import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
 import com.ShowTiCat.repository.ShowRepository;
 import com.ShowTiCat.repository.TheaterRepository;
 import com.ShowTiCat.util.AwsS3;
 import com.ShowTiCat.util.DateUtil;
+import com.ShowTiCat.vo.CastDetailVO;
+import com.ShowTiCat.vo.CastMultikey;
+import com.ShowTiCat.vo.CastVO;
 import com.ShowTiCat.vo.PlaceVO;
 import com.ShowTiCat.vo.ScheduleVO;
 import com.ShowTiCat.vo.ShowVO;
@@ -42,6 +51,15 @@ public class AdminController {
 	TheaterRepository tRepo;
 	
 	@Autowired
+	CastDetailRepository cdRepo;
+	
+	@Autowired
+	CastRepository cRepo;
+	
+	@Autowired
+	ReservationRepository rRepo;
+	
+	@Autowired
 	AwsS3 s3;
 	
 	@GetMapping("/ShowTiCat/admin")
@@ -55,27 +73,66 @@ public class AdminController {
 		return "/admin/show";
 	}
 	
-	@ResponseBody
-	@PostMapping("/admin/findShow/{showCode}")
-	public ShowVO findShow(@PathVariable Long showCode) {
-		return sRepo.findById(showCode).get();
-	}
-	
 	@GetMapping("/admin/addShow")
-	public void addShowPage() {
+	public void showAddPage() {
 	}
 	
 	@PostMapping("/admin/addShow")
 	public String addShow(@ModelAttribute ShowVO show, MultipartFile file) throws IOException {
-		String img = s3.upload(file, "uploads/showImg/");
-		show.setPoster(img);
-		sRepo.save(show);
+		if(!file.isEmpty()) {
+			String img = s3.upload(file, "uploads/showImg/");
+			show.setPoster(img);
+		}
+		
+		ShowVO s = sRepo.save(show);
+		
+		for(Long castId:show.getCastId()) {
+			CastDetailVO cast = cdRepo.findById(castId).get();
+			CastMultikey multiKey = CastMultikey.builder().show(s).castDetail(cast).build();
+			CastVO c = new CastVO(multiKey);
+			cRepo.save(c);
+		}
+		
 		return "redirect:/ShowTiCat/admin/show";
 	}
 	
+	@GetMapping("/admin/show/{showCode}")
+	public String showUpdatePage(@PathVariable Long showCode, Model model) {
+		ShowVO show = sRepo.findById(showCode).get();
+		List<CastVO> castList = cRepo.findByshowCode(showCode);
+		
+		String cList = "";
+		for(int i=0;i<castList.size();i++) {
+			cList += castList.get(i).getCast().getCastDetail().getCastName();
+			if(i < castList.size() -1) {
+				cList += ", ";
+			}
+		}
+		
+		model.addAttribute("show", show);
+		model.addAttribute("cList", cList);
+		model.addAttribute("cast", cRepo.findAll());
+		return "/admin/updateShow";
+	}
+
 	@PostMapping("/admin/updateShow")
-	public String updateShow(@ModelAttribute ShowVO show, MultipartFile file) {
+	public String updateShow(@ModelAttribute ShowVO show, MultipartFile file) throws IOException {
 		ShowVO s = sRepo.findById(show.getShowCode()).get();
+		
+		if(!file.isEmpty()) {
+			s3.delete(s.getPoster()); //s3에서 이미지 삭제
+			
+			String img = s3.upload(file, "uploads/showImg/");
+			s.setPoster(img);
+		 }
+		
+		for(Long castId:show.getCastId()) {
+			CastDetailVO cast = cdRepo.findById(castId).get();
+			CastMultikey multiKey = CastMultikey.builder().show(s).castDetail(cast).build();
+			CastVO c = new CastVO(multiKey);
+			cRepo.save(c);
+		}
+		
 		s.setCategory(show.getCategory());
 		s.setDirector(show.getDirector());
 		s.setOpeningDate(show.getOpeningDate());
@@ -94,12 +151,7 @@ public class AdminController {
 		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/place";
 	}
-	
-	@ResponseBody
-	@PostMapping("/admin/findPlace/{placeId}")
-	public PlaceVO findPlace(@PathVariable Long placeId) {
-		return pRepo.findById(placeId).get();
-	}
+
 	
 	@PostMapping("/admin/addPlace")
 	public String addPlace(@ModelAttribute PlaceVO place) {
@@ -124,22 +176,10 @@ public class AdminController {
 		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/theater";
 	}
-	
-	@ResponseBody
-	@PostMapping("/admin/getTheaterList/{placeId}")
-	public List<TheaterVO> getTheaterList(@PathVariable Long placeId) {
-		return tRepo.findByPlaceId(placeId);
-	}
-	
-	@ResponseBody
-	@PostMapping("/admin/findTheater/{theaterId}")
-	public TheaterVO findTheater(@PathVariable Long theaterId) {
-		return tRepo.findById(theaterId).get();
-	}
-	
+
 	@GetMapping("/ShowTiCat/admin/schedule")
 	public String adminSchedule(Model model) {
-		model.addAttribute("scheduleList", scRepo.findAll());
+		model.addAttribute("scheduleList", scRepo.findAllByOrderByShowStart());
 		model.addAttribute("showList", sRepo.findAll());
 		model.addAttribute("placeList", pRepo.findAll());
 		return "/admin/schedule";
@@ -153,15 +193,24 @@ public class AdminController {
 		Date d = DateUtil.convertToDateTime(startTime);
 		
 		ScheduleVO schedule = ScheduleVO.builder().place(p).show(s).theater(t).showStart(d).build();
-		System.out.println(schedule);
 		scRepo.save(schedule);
 		
 		return "redirect:/ShowTiCat/admin/schedule";
 	}
-	
-	@ResponseBody
-	@PostMapping("/admin/findSchedule/{scheduleId}")
-	public ScheduleVO findSchedule(@PathVariable Long scheduleId) {
-		return scRepo.findById(scheduleId).get();
+
+	@PostMapping("/admin/updateSchedule")
+	public String updateSchedule(Long scheduleId, Long showCode, Long theaterId, String startTime) {
+		ScheduleVO schedule = scRepo.findById(scheduleId).get();
+		System.out.println("startTime => "+startTime);
+		
+		ShowVO s = sRepo.findById(showCode).get();
+		TheaterVO t = tRepo.findById(theaterId).get();
+		
+		schedule.setShow(s);
+		schedule.setTheater(t);
+		
+		scRepo.save(schedule);
+		
+		return "redirect:/ShowTiCat/admin/schedule";
 	}
 }

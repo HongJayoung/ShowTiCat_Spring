@@ -11,11 +11,10 @@
 <script>
 $(function() {
 	$("#category").on("change", changePrice);
-	$("#resetBtn").on("click", reset);
-	$("#returnBtn").on("click", goBack);
-	$("#addCastBtn").on("click", getCastList);
 	$("#addcast").on("click", addcast);
 	$("#newCast").on("click", newCast);
+	$("#deleteBtn").on("click", deleteShow);
+	$("#returnBtn").on("click", goBack);
 	
 	//파일 업로더 label
 	$(".custom-file-input").on("change",function() {
@@ -38,27 +37,6 @@ function changePrice() {
 
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
-
-function reset() {
-	$("#fileName").html("Choose file");
-}
-
-function goBack() {
-	location.href="/ShowTiCat/admin/show";
-}
-
-function getCastList() {
-	$.ajax({
-		type:"post",
-		url: "/admin/getCastList",
-		beforeSend : function(xhr){
-			xhr.setRequestHeader(header, token);
-		},
-		success:function(resData) {
-			printList(resData);
-		}
-	});
-}
 
 function addcast() {
 	$("#myModal").hide();
@@ -104,6 +82,32 @@ function printList(resData) {
 
 	$("#getCast").html(str);
 }
+
+function deleteShow() {
+	if(confirm("정말 삭제하시겠습니까?\n삭제된 정보는 복구되지않습니다.")) {
+		var showCode = $("input[name='showCode']").val();
+		
+		$.ajax({
+			type:"delete",
+			url: "/admin/deleteShow/"+showCode,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success:function(resData) {
+				if(resData == "") {
+					alert("영화/공연이 삭제되었습니다.")
+					location.href="/ShowTiCat/admin/show";
+				}else{
+					alert(resData);
+				}
+			}
+		});
+	}
+}
+
+function goBack() {
+	location.href="/ShowTiCat/admin/show";
+}
 </script>
 	
 </head>
@@ -111,15 +115,16 @@ function printList(resData) {
 <body>
 <div layout:fragment="content">
 	<div class="contents">
-		<h2>영화/공연 추가</h2> <hr>
-		<form th:action="@{/admin/addShow}" method="post" id="addShowForm" enctype="multipart/form-data">
+		<h2>영화/공연 수정</h2> <hr>
+		<form th:action="@{/admin/updateShow}" method="post" id="addShowForm" enctype="multipart/form-data">
 			<div class="form-group">
+				<input type="hidden" name="showCode" th:value="${show.showCode}">
 				<label>제목</label> 
-				<input class="form-control" type="text" name="showName" value="">
+				<input class="form-control" type="text" name="showName" th:value="${show.showName}">
 			</div>
 			<div class="form-group">
 				<label>감독</label> 
-				<input class="form-control" type="text" name="director" value="">
+				<input class="form-control" type="text" name="director" th:value="${show.director}">
 			</div>
 			<div class="form-group">
 				<label>
@@ -127,34 +132,36 @@ function printList(resData) {
 					<button class="btn btn-showticat btn-sm" id="addCastBtn" type="button" data-toggle="modal" data-target="#myModal">+</button>
 				</label> 
 				<input type="hidden" id="listVal" name="castId">
-				<input class="form-control" type="text" id="listName" readonly="readonly">
+				<input class="form-control" type="text" id="listName" readonly="readonly" th:value="${cList}">
 			</div>
 			<div class="form-group">
 				<label>예고편</label> 
-				<input class="form-control" type="text" name="trailer" value="">
+				<input class="form-control" type="text" name="trailer" th:value="${show.trailer}">
 				<!-- 형식지정 -->
 			</div>
 			<div class="form-group">
 				<label>개봉일자</label> 
-				<input class="form-control" type="date" name="openingDate" value="">
+				<input class="form-control" type="date" name="openingDate" th:value="${show.openingDate}">
 			</div>
 			<div class="form-group">
 				<label>러닝타임(분)</label> 
-				<input class="form-control" type="number" name="runningTime" value="">
+				<input class="form-control" type="number" name="runningTime" th:value="${show.runningTime}">
 			</div>
 			<div class="form-group">
 				<label>카테고리</label> 
 				<select class="form-control" name="category" id="category">
-					<option value="영화">영화</option>
-					<option value="공연">공연</option>
+					<option th:selected="${show.category} == '영화'">영화</option>
+					<option th:selected="${show.category} == '공연'">공연</option>
 				</select>
 			</div>
 			<div class="form-group">
 				<label>줄거리</label>
-				<textarea class="form-control" name="summary" rows="5"></textarea>
+				<textarea class="form-control" name="summary" rows="5">[[${show.summary}]]</textarea>
 			</div>
 			<div class="form-group">
 				<label>포스터</label>
+				<!-- <input class="form-control" type="text" readonly="readonly" th:value="${#strings.substring(show.poster?:0,103)}"> -->
+				<input class="form-control" type="text" readonly="readonly" th:value="${show.poster}">
 				<div class="custom-file form-control">
 					<input type="file" class="custom-file-input" id="customFile" name="file"> 
 					<label class="custom-file-label" for="customFile" id="fileName">Choose file</label>
@@ -162,10 +169,10 @@ function printList(resData) {
 			</div>
 			<div class="form-group">
 				<label>가격</label>
-				<input class="form-control" type="number" name="price" readonly="readonly" id="price" value="12000">
+				<input class="form-control" type="number" name="price" readonly="readonly" id="price" th:value="${show.price}">
 			</div>
-			<input class="btn btn-showticat" type="submit" value="등록"> 
-			<input class="btn btn-outline-showticat" type="reset" value="리셋" id="resetBtn"> 
+			<input class="btn btn-showticat" type="submit" value="수정"> 
+			<input class="btn btn-outline-showticat" type="button" value="삭제" id="deleteBtn"> 
 			<input class="btn btn-outline-showticat" type="button" value="돌아가기" id="returnBtn">
 		</form>
 	</div>
@@ -186,7 +193,9 @@ function printList(resData) {
 						출연자
 						<button class="btn btn-showticat btn-sm" id="newCastBtn" type="button" data-toggle="modal" data-target="#myModal2">+</button>
 					</label>
-					<select class="form-control" id="getCast" multiple="multiple" size="5"> </select>
+					<select class="form-control" id="getCast" multiple="multiple" size="5">
+						<option th:each="c:${cast}" th:value="${c.cast.castDetail.castId}">[[${c.cast.castDetail.castName}]]</option>
+					</select>
 				</div>
 
 				<!-- Modal footer -->
@@ -197,7 +206,7 @@ function printList(resData) {
 		</div>
 	</div>
 	
-	<div class="modal" id="myModal2">
+	<div class="modal" id="myModal">
 		<div class="modal-dialog">
 			<div class="modal-content">
 

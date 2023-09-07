@@ -15,6 +15,7 @@ $(function() {
 	$(".place").on("click", getTheaterList);
 	$("#addSubmitBtn").on("click", addTheater);
 	$("#updateSubmitBtn").on("click", updateTheater);
+	$("#deleteBtn").on("click", deleteTheater);
 })
 
 var token = $("meta[name='_csrf']").attr("content");
@@ -93,7 +94,7 @@ function updateTheater() {
 		"theaterType" : theaterType,
 		"lastSeat" : lastSeat
 	};
-	console.log("보내기전");
+	
 	$.ajax({
 		type:"post",
 		url: "/admin/updateTheater",
@@ -109,6 +110,32 @@ function updateTheater() {
 			$(".modal-backdrop").remove();
 		}
 	})
+}
+
+function deleteTheater() {
+	if(confirm("정말 삭제하시겠습니까?\n삭제된 정보는 복구되지않습니다.")) {
+		var theaterId = $("#myModal2 input[name='theaterId']").val();
+		
+		$.ajax({
+			type:"delete",
+			url: "/admin/deleteTheater/"+theaterId,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success:function(resData) {
+				/* var str = "상영관이 삭제되었습니다.";
+				for(var i = 0;i < resData.length;i++) {
+					if(resData[i].theaterId = theaterId){
+						str = "상영스케줄이 있어 삭제가 불가합니다.";
+					}
+				}
+				alert(str); */
+				printList(resData);
+				$("#myModal2").hide();
+				$(".modal-backdrop").remove();
+			}
+		});
+	}
 }
 
 function printList(resData) {
@@ -190,12 +217,12 @@ function printList(resData) {
 					</select>
 	      		<label>좌석 수</label>
 				<input class="form-control" type="text" id="lastSeat" name="lastSeat"><br>
-		
-		        <!-- Modal footer -->
-		        <div class="modal-footer">
-		          <button class="btn btn-showticat" id="addSubmitBtn">등록하기</button>
-		        </div>
 	      </div>
+		
+		  <!-- Modal footer -->
+		  <div class="modal-footer">
+		  	<button class="btn btn-showticat" id="addSubmitBtn">등록하기</button>
+		  </div>
 	
 	    </div>
 	  </div>
@@ -207,7 +234,7 @@ function printList(resData) {
 	
 	      <!-- Modal Header -->
 	      <div class="modal-header">
-	        <h4 class="modal-title">상영관 추가</h4>
+	        <h4 class="modal-title">상영관 수정</h4>
 	        <button type="button" class="close" data-dismiss="modal">&times;</button>
 	      </div>
 	
@@ -228,6 +255,7 @@ function printList(resData) {
 		        <!-- Modal footer -->
 		        <div class="modal-footer">
 		          <button class="btn btn-showticat" id="updateSubmitBtn">수정하기</button>
+		          <button class="btn btn-outline-showticat" id="deleteBtn">삭제</button>
 		        </div>
 	      </div>
 	

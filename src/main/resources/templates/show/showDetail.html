@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/show/showDetail.css}" />
+
+<title>ShowTiCat | SHOW</title>
+
+<script>
+
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<img class="left poster" th:alt="${show.showName}" th:src="${show.poster}" width="300px" height="400px">
+		<div class="left">
+			<p class="title">[[${show.showName}]]</p>
+			<hr>
+			<p class="info">감독 : [[${show.director}]]</p>
+			<p class="info">배우 : 
+			<th:block th:each="cast:${castList}">
+				<a th:href="@{http://www.playdb.co.kr/artistdb/detail.asp?ManNo=}+${cast.cast.castDetail.castUrl}" target="_blank">
+					[[${cast.cast.castDetail.castName}]]
+				</a>
+				<th:block th:if="${!castStat.last}">, </th:block>
+			</th:block>
+			</p>
+			<p class="info">상영시간 : [[${show.runningTime}]]분</p>
+			<p class="info">개봉일 : [[${show.openingDate}]]</p>
+			<button class="btn btn-outline-showticat trailerBtn" data-toggle="modal" data-target="#myModal">예고편보기</button>
+			<button class="btn btn-showticat" id="reservBtn">예매하기</button>
+		</div>
+		<hr>
+		<h4 class="ti">줄거리</h4>
+		<p class="summary">[[${show.summary}]]</p>
+		<hr>
+		<h4 class="ti">예매자 통계</h4>
+		<div>차트!</div>
+		<hr>
+		<h4 class="ti">리뷰</h4>
+		<div>[[${reviewList}]]</div>
+		<hr>
+	
+		<!-- 예고편 모달 -->
+		<div class="modal" id="myModal">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		    
+		      <!-- Modal Header -->
+		      <div class="modal-header">
+		        <h4 class="modal-title">TRAILER</h4>
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		      </div>
+		      
+		      <!-- Modal body -->
+		      <div class="modal-body">
+		        <iframe width="700" height="395" th:src="@{https://www.youtube.com/embed/}+${show.trailer}+@{?autoplay=1&mute=1}"
+		        	title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div><!-- contents -->
+</div>
+</body>
+</html>

@@ -75,7 +75,7 @@
                     </li>
                     <li>
                         <h2>
-	                       <a th:href="@{/place/15}" id="theaterList">극장</a>
+	                       <a th:href="@{/place/15/}+${session.date}" id="theaterList">극장</a>
 	                       <!--  <th:if test="${session.member != null && session.member.place_num != 0}">
 	                        	<a href="${path}/jayoung/placeDetail.do?place_num=${member.place_num}&date=${sysdate}" id="theaterList">극장</a>
 	                        </th:if> -->

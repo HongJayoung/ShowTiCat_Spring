@@ -11,7 +11,20 @@
 <title>ShowTiCat | SHOW</title>
 
 <script>
+$(function() {
+	$(".reservBtn").on("click", goReservation);
+	$(".poster").on("click", showDetail);
+})
 
+function goReservation() {
+	var code = $(this).attr("code");
+	alert(code);
+}
+
+function showDetail() {
+	var code = $(this).attr("code");
+	location.href="/show/detail/"+code;
+}
 </script>
 </head>
 

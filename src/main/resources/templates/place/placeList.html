@@ -10,37 +10,33 @@
 
 <title>ShowTiCat | PLACE</title>
 
+<style>
+.showInfo {
+    padding-left: 10px;
+}
+
+.showName:hover {
+	font-weight: bold;
+}
+</style>
 <script>
 $(function() {
-	$("#thisWeek").html(getDate);
+	$(".getSchedule").click(getSchedule);
+	$(".goReservation").click(goReservation);
 })
 
-function getDate() {
-	var day = new Date();
-	var dd = changeFormat(day);
-	var today = Date.parse(day);
-	
-	var str = "<button class='btn btn-light' onClick='getSchedule("+ dd +")'>" + dd + "</button>";
-	
-	for (var i=0; i<7; i++) {
-	    today += 86400000;
-	    var d = changeFormat(new Date(today));
-	    str += "<button class='btn btn-light' onClick='getSchedule("+ d +")'>" + d + "</button>";
-	}
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+var placeId = '[[${place.placeId}]]/';
 
-  return str;
+function getSchedule() {
+	var date = $(this).attr("date");
+	location.href="/place/"+placeId+date;
 }
 
-function changeFormat(d) {
-	var date = d.getFullYear() + "-" 
-			+ ((d.getMonth()+1)<=9?"0" + (d.getMonth()+1):(d.getMonth()+1)) + "-"
-			+ ((d.getDate()+1)<=9?"0" + (d.getDate()+1):(d.getDate()+1));
-			
-	return date;
-}
-
-function getSchedule(day) {
-	console.log(day);
+function goReservation() {
+	var scheduleId = $(this).attr("schedule-id");
+	location.href="/reservation/"+scheduleId;
 }
 </script>
 </head>
@@ -67,9 +63,46 @@ function getSchedule(day) {
 			<div id="map">지도!</div>
 		</div>
 		<hr>
-		<div id="thisWeek"></div>
+		<div id="thisWeek">
+			<button th:each="date:${weekDate}" class='btn btn-light getSchedule' th:date="${date}">[[${date}]]</button>
+		</div>
 		<hr>
-		<div>상영스케줄!</div>
+		<div id="scheduleList">
+			<th:block th:each="schedule:${scheduleList}">
+				<!-- 첫번째 -->
+				<th:block th:if="${scheduleStat.first}">
+					<div>
+						<a class="showName" th:href="@{/show/detail/}+${schedule.show.showCode}">[[${schedule.show.showName}]]</a>
+						<span class="showInfo"> [[${schedule.show.category}]] | [[${schedule.show.runningTime}]]분 | [[${schedule.show.openingDate}]] OPEN</span>
+					</div>
+					<p class="theaterInfo">[[${schedule.theater.theaterId}]]관 | [[${schedule.theater.theaterType}]] | 총 [[${schedule.theater.lastSeat}]]석</p>
+				</th:block>
+				
+				<!-- 중간 -->
+				<th:block th:if="${!scheduleStat.first}">
+					<!-- 이전과 같은 show인 경우 -->
+					<th:block th:if="${scheduleList[scheduleStat.index].show.showCode == scheduleList[scheduleStat.index-1].show.showCode}">
+						<!-- 이전과 다른 상영관인 경우 -->
+						<th:block th:if="${scheduleList[scheduleStat.index].theater.theaterId != scheduleList[scheduleStat.index-1].theater.theaterId}">
+							<br>
+							<p class="theaterInfo">[[${schedule.theater.theaterId}]]관 | [[${schedule.theater.theaterType}]] | 총 [[${schedule.theater.lastSeat}]]석</p>
+						</th:block>
+					</th:block>
+					
+					<!-- 이전과 다른 show인 경우 -->
+					<th:block th:if="${scheduleList[scheduleStat.index].show.showCode != scheduleList[scheduleStat.index-1].show.showCode}">
+						<hr>
+						<div>
+							<a class="showName" th:href="@{/show/detail/}+${schedule.show.showCode}">[[${schedule.show.showName}]]</a>
+							<span class="showInfo"> [[${schedule.show.category}]] | [[${schedule.show.runningTime}]]분 | [[${schedule.show.openingDate}]] OPEN</span>
+						</div>
+						<p class="theaterInfo">[[${schedule.theater.theaterId}]]관 | [[${schedule.theater.theaterType}]] | 총 [[${schedule.theater.lastSeat}]]석</p>
+					</th:block>
+				</th:block>
+				<button class="btn btn-outline-showticat goReservation" th:schedule-id="${schedule.scheduleId}">[[${#dates.format(schedule.showStart, 'HH:mm')}]] <br>  /[[${schedule.theater.lastSeat}]]석</button>
+			</th:block>
+
+		</div>
 	</div><!-- contents -->
 </div>
 </body>
