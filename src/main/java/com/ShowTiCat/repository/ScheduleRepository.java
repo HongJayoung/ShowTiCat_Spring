@@ -1,10 +1,12 @@
 package com.ShowTiCat.repository;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import com.ShowTiCat.vo.PlaceVO;
 import com.ShowTiCat.vo.ScheduleVO;
 
 public interface ScheduleRepository extends JpaRepository<ScheduleVO, Long>{
@@ -19,5 +21,12 @@ public interface ScheduleRepository extends JpaRepository<ScheduleVO, Long>{
 
 	@Query(value = "select * from schedule where theater_theater_id = ?1", nativeQuery = true)
 	List<ScheduleVO> findByTheaterId(Long theaterId);
-
+	
+	@Query(value = "select * from schedule where place_place_id = ?1 and show_start < ?2 and show_start >= current_timestamp "
+							+ "order by show_show_code, theater_theater_id, show_start", nativeQuery = true)
+	List<ScheduleVO> findByPlaceIfToday(Long placeId, Date dayAfter);
+	
+	@Query(value = "select * from schedule where place_place_id = ?1 and show_start >= ?2 and show_start < ?3 "
+							+ "order by show_show_code, theater_theater_id, show_start", nativeQuery = true)
+	List<ScheduleVO> findByPlaceAndShowStartBetween(PlaceVO place, Date day, Date dayAfter);
 }

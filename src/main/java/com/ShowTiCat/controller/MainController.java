@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ShowTiCat.repository.MemberRepository;
+import com.ShowTiCat.util.DateUtil;
 import com.ShowTiCat.vo.MemberVO;
 
 @Controller
@@ -19,6 +20,7 @@ public class MainController {
 	public String showTiCat(HttpSession session) {
 		MemberVO m = mRepo.findById("test").get();
 		session.setAttribute("member", m);
+		session.setAttribute("date", DateUtil.getSysdate());
 		return "/main/showTiCat";
 	}
 }
