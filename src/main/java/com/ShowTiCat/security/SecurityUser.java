@@ -20,15 +20,15 @@ import lombok.Setter;
 public class SecurityUser extends User{
 	private static final long serialVersionUID = 1L;
 	private static final String ROLE_PREFIX="ROLE_USER";
-    private MemberVO member;   
+    private MemberVO member;
+    
 	public SecurityUser(String name, String password, Collection<? extends GrantedAuthority> authorities) {
 		super(name, password, authorities);
 	}
 	
 	public SecurityUser(MemberVO member) {	
-		super(member.getMemberId(), member.getPw(), makeRole(member)  );
+		super(member.getMemberId(), member.getPw(), makeRole(member));
 		this.member = member;
-		System.out.println("SecurityUser member:" + member);
 	}
 	
 	private static List<GrantedAuthority> makeRole(MemberVO member) {
@@ -38,7 +38,6 @@ public class SecurityUser extends User{
 	}
 	
 	public String getName() {
-		// TODO Auto-generated method stub
 		return super.getUsername();
 	}
 	

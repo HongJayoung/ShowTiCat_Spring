@@ -1,5 +1,7 @@
 package com.ShowTiCat.controller;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +19,11 @@ public class MainController {
 	MemberRepository mRepo;
 	
 	@GetMapping("/ShowTiCat")
-	public String showTiCat(HttpSession session) {
-		MemberVO m = mRepo.findById("test").get();
-		session.setAttribute("member", m);
+	public String showTiCat(Principal principal, HttpSession session) {
+		if(principal != null) {
+			MemberVO m = mRepo.findById(principal.getName()).get();
+			session.setAttribute("member", m);
+		}
 		session.setAttribute("date", DateUtil.getSysdate());
 		return "/main/showTiCat";
 	}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+<title>ShowTiCat | FIND ID</title>
+
+<script>
+$(function() {
+	$("#login").on("click", login);
+	$("#pw").on("keyup",checkPW);
+	$("#pw2").on("keyup",checkPW);
+	$("#resetForm").on("submit", isPwChecked);
+})
+
+function login() {
+	location.href="/ShowTiCat/login";
+}
+
+function checkPW() {
+	var pw1 = $("#pw").val().trim();
+	var pw2 = $("#pw2").val().trim();
+	
+	if(pw1==null||pw1==''){
+		$("#pwMsg").html("PW는 필수입력입니다.");
+	}else if(pw1 != pw2) {
+		$("#pwMsg").html("비밀번호를 확인하세요.");
+	} else {
+		$("#pwMsg").hide();
+		$("#pwMsg").html("ok");
+	}
+}
+
+function isPwChecked() {
+	msg = $("#pwMsg").html();
+	if(msg != "ok") {
+		return false;
+	}
+}
+</script>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h4>비밀번호 초기화</h4>
+			<form th:action="@{/ShowTiCat/resetPw}" method="post" id="resetForm">
+				<input type="hidden" name="memberId" id="memberId" th:value="${memberId}">
+				<div class="form-group">
+					<label>PASSWORD </label>
+					<input class="form-control" type="password" name="pw" id="pw">
+				</div>
+				
+				<div class="form-group">
+					<label>PASSWORD CHECK</label>
+					<input class="form-control" type="password" id="pw2" placeholder="비밀번호 확인">
+					<span id="pwMsg"></span>
+				</div>
+				
+				<input class="btn btn-showticat" type="submit" value="비밀번호 변경">
+			</form>
+		<hr>
+		<button id="login" class="btn btn-outline-showticat">로그인</button>
+	</div>
+</div>
+</body>
+</html>

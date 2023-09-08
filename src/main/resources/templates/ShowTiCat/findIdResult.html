@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+<title>ShowTiCat | FIND ID</title>
+
+<script>
+$(function() {
+	$("#login").on("click", login);
+	$("#findPW").on("click", findPW);
+})
+
+function findID() {
+	location.href="/ShowTiCat/login";
+}
+
+function findPW() {
+	location.href="/ShowTiCat/findPw";
+}
+</script>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h4>ID는 [[${memberId}]]입니다.</h4>
+		<hr>
+		<button id="login" class="btn btn-outline-showticat">로그인</button>
+		<button id="findPW" class="btn btn-outline-showticat">비밀번호 찾기</button>
+	</div>
+</div>
+</body>
+</html>
