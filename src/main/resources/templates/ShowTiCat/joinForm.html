@@ -79,7 +79,8 @@ function checkPW() {
 	}else if(pw1 != pw2) {
 		$("#pwMsg").html("비밀번호를 확인하세요.");
 	} else {
-		$("#pwMsg").html("사용가능한 PW입니다.");
+		$("#pwMsg").hide();
+		$("#pwMsg").html("ok");
 	}
 }
 
@@ -93,7 +94,7 @@ function isChecked() {
 	if(idMsg != "사용가능한 ID입니다.") {
 		$("#membwrId").focus();
 		return false;
-	}else if(pwMsg != "사용가능한 PW입니다.") {
+	}else if(pwMsg != "ok") {
 		$("#pw").focus();
 		return false;
 	}else if(name==null||name==''){

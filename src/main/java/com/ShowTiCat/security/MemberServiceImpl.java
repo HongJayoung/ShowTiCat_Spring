@@ -47,6 +47,11 @@ public class MemberServiceImpl implements SecurityService{
 	}
 	
 	@Override
+	public Boolean checkPw(MemberVO member, String pw) {
+		return passwordCompare(pw, member);
+	}
+	
+	@Override
 	@Transactional
 	public MemberVO insertMember(MemberVO member) {
 		// 비밀번호 암호화...암호화되지않으면 로그인되지않는다.

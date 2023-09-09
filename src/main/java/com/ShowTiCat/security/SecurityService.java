@@ -16,5 +16,8 @@ public interface SecurityService extends UserDetailsService{
 	
 	//회원가입
 	MemberVO insertMember(MemberVO member);
+
+	//비밀번호 확인
+	Boolean checkPw(MemberVO member, String pw);
 }
  
