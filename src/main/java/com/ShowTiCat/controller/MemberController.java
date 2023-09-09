@@ -80,8 +80,9 @@ public class MemberController {
 	}
 	
 	@PostMapping("/myPage/updateMyInfo")
-	public String updateMyInfo(@ModelAttribute MemberVO member) {
-		mservice.insertMember(member);
+	public String updateMyInfo(@ModelAttribute MemberVO member, HttpSession session) {
+		MemberVO m = mservice.insertMember(member);
+		session.setAttribute("member", m);
 		return "redirect:/myPage";
 	}
 	
@@ -92,7 +93,10 @@ public class MemberController {
 	}
 	
 	@GetMapping("/myPage/deleteAccount")
-	public void deleteAccount(Model model) {
-		model.addAttribute("from", "deleteAccount");
+	public void deleteAccount(HttpSession session) {
+		//예매내역이 있으면 안되게해야되나
+		
+		//
+		
 	}
 }

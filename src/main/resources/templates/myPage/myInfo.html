@@ -9,7 +9,46 @@
 <title>ShowTiCat | MYPAGE</title>
 
 <script>
+$(function() {
+	$("#pw").on("keyup",checkPW);
+	$("#pw2").on("keyup",checkPW);
+	$("#updateForm").on("submit", isChecked);
+})
 
+function checkPW() {
+	var pw1 = $("#pw").val().trim();
+	var pw2 = $("#pw2").val().trim();
+	
+	if(pw1==null||pw1==''){
+		$("#pwMsg").show();
+		$("#pwMsg").html("PW는 필수입력입니다.");
+	}else if(pw1 != pw2) {
+		$("#pwMsg").show();
+		$("#pwMsg").html("비밀번호를 확인하세요.");
+	} else {
+		$("#pwMsg").hide();
+		$("#pwMsg").html("ok");
+	}
+}
+
+function isChecked() {
+	var pwMsg = $("#pwMsg").html().trim();
+
+	var name = $("#mname").val();
+	var email = $("#email1").val();
+	
+	if(pwMsg != "ok") {
+		$("#pw").focus();
+		return false;
+	}else if(name==null||name==''){
+		$("#name").focus();
+		return false;
+	}else if(email==null||email==''){
+		$("#email").focus();
+		return false;
+	}
+	
+}
 </script>
 </head>
 

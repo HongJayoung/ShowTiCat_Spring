@@ -75,8 +75,10 @@ function checkPW() {
 	var pw2 = $("#pw2").val().trim();
 	
 	if(pw1==null||pw1==''){
+		$("#pwMsg").show();
 		$("#pwMsg").html("PW는 필수입력입니다.");
 	}else if(pw1 != pw2) {
+		$("#pwMsg").show();
 		$("#pwMsg").html("비밀번호를 확인하세요.");
 	} else {
 		$("#pwMsg").hide();

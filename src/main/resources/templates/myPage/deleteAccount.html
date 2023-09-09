@@ -10,16 +10,22 @@
 
 <title>ShowTiCat | MYPAGE</title>
 
-<script>
-
-</script>
+<style>
+#goodByeMsg {
+	text-align: center;
+    padding-top: 100px;
+}
+</style>
 </head>
 
 <body>
 <div layout:fragment="content">
 	<div class="contents">
 		<div th:replace="~{/myPage/side}"></div>
-		<h2>DELETE ACCOUNT</h2>
+		<div id="goodByeMsg">
+			<p>ShowTiCat을 이용해주셔서 감사합니다.</p>
+			<button class="btn btn-sm btn-outline-showticat">메인으로</button>
+		</div>
 	</div><!-- contents -->
 </div>
 </body>

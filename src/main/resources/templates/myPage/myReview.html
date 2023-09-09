@@ -45,7 +45,7 @@ function updateReview() {
 <div layout:fragment="content">
 	<div class="contents">
 		<div th:replace="~{/myPage/side}"></div>
-		<div class="centerHidden">
+		
 			<h2>MY REVIEW</h2>
 			<p th:if="${reviewList == null}">등록한 리뷰가 없습니다.</p>
 			
@@ -81,7 +81,6 @@ function updateReview() {
 					</tr>
 				</tbody>
 			</table>
-		</div><!-- centerHidden -->
 	</div>
 </div>
 </body>
