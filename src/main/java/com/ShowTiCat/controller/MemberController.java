@@ -81,8 +81,13 @@ public class MemberController {
 	
 	@PostMapping("/myPage/updateMyInfo")
 	public String updateMyInfo(@ModelAttribute MemberVO member, HttpSession session) {
-		MemberVO m = mservice.insertMember(member);
-		session.setAttribute("member", m);
+		MemberVO m = (MemberVO) session.getAttribute("member");
+		member.setMPoint(m.getMPoint());
+		member.setPlace(m.getPlace());
+		member.setRegDate(m.getRegDate());
+		
+		MemberVO updateM = mservice.insertMember(member);
+		session.setAttribute("member", updateM);
 		return "redirect:/myPage";
 	}
 	
