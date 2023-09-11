@@ -8,10 +8,112 @@
 
 <title>ShowTiCat | RESERVATION</title>
 
+<style>
+.paymentBox {
+	display: flex;
+    justify-content: space-between;
+    background-color: #1e7e3412;
+    border-color: #1e7e3412;
+    border-radius: 0.25em;
+    padding: 20px;
+}
+
+.paymentInfo {
+	width: 50%;
+}
+
+.priceInfo {
+	width: 30%;
+}
+
+.totalPrice, .remaingPrice, .memberPoint {
+	display: inline-block;
+}
+
+.pointBox {
+	display: none;
+}
+
+.flex {
+	display: flex;
+	justify-content: space-around;
+}
+
+.poster {
+	width: 210px;
+	height: 280px;
+}
+
+.totalPaymentBox {
+	width: 45%;
+    background-color: #1e7e3412;
+    border-color: #1e7e3412;
+    border-radius: 0.25em;
+    padding: 20px;
+}
+</style>
 <script>
 $(function() {
+	getAllPriceInfo();
+	
+	$("#usePoint").change(showPointInput);
+	$("#point").keyup(calTotalPrice);
+	$("#PayBtn").click(getPaymentInfo);
+	$("#submitBtn").click(submit);
 })
 
+function getAllPriceInfo() {
+	var mPoint = '[[${session.member.mPoint?:0}]]';
+	var price = '[[${#lists.size(checkedSeat) * schedule.show.price}]]';
+	
+	$("#point").attr("max",Math.min(mPoint,price));
+	$("#memberPoint").html(mPoint);
+	$("#totalPrice").html(price);
+	$("#remaingPrice").html(price);
+}
+
+function showPointInput() {
+	var isPointUsed = $('#usePoint').is(':checked');
+	if(isPointUsed == true) {
+		$("#point").val(null);
+		$("#pointBox").show();
+	} else {
+		$("#pointBox").hide();
+	}
+}
+
+function calTotalPrice() {
+	var totalPoint = $("#totalPrice").html();
+	var point = $("#point").val();
+	
+	$("#remaingPrice").html(totalPoint-point);
+}
+
+function getPaymentInfo() {
+	var usedPoint = $("#point").val();
+	var remaingPrice = $("#remaingPrice").html();
+	var payment = $("input[name='payment']:checked").val();
+	var totalPrice = parseFloat(remaingPrice);
+	
+	if(usedPoint != "") totalPrice += parseFloat(usedPoint);
+	console.log(totalPrice)
+	if(payment == null) {
+		alert("결제수단을 선택해주세요.");
+	} else {
+		var str ="";
+		if(usedPoint != 0) str += "<p> 포인트 " + usedPoint + " 점</p]>";
+		str += "<p>" + payment + " " + remaingPrice + " 원</p>";
+		
+		$("#totalPayment").html(str);
+		$("input[name='usedPoint']").val(usedPoint);
+		$("input[name='payment']").val(payment);
+		$("input[name='totalPrice']").val(totalPrice);
+	}
+}
+
+function submit() {
+	$("#payForm").submit();
+}
 </script>
 </head>
 
@@ -19,8 +121,76 @@ $(function() {
 <div layout:fragment="content">
 	<div class="contents">
 		<h1>결제하기</h1>
-
-
+		<div>[[${schedule.show}]]</div>
+		<div>[[${checkedSeat}]]</div>
+		<hr>
+		<div id="paymentBox" class="paymentBox">
+			<div id="paymentInfo" class="paymentInfo">
+				<ul>
+					<li id="usePointBox" class="usePointBox">
+						<input id="usePoint" class="usePoint" type="checkbox">포인트 사용
+					</li>
+					<li id="pointBox" class="pointBox">
+						<input id="point" class="point" type="number" min="0" max="">
+						(사용가능 포인트 : <p id="memberPoint" class="memberPoint"></p>점)
+					</li>
+					<li>결제수단</li>
+					<li>
+						<input type="radio" name="payment" value="카드"> 카드
+						<input type="radio" name="payment" value="간편결제"> 간편결제
+					</li>
+				</ul>
+			</div>
+		
+			<div id="priceInfo" class="priceInfo">
+				<ul>
+					<li>결제하실 금액</li>
+					<li><p id="totalPrice" class="totalPrice"></p>원</li>
+					<li>남은 결제금액</li>
+					<li><p id="remaingPrice" class="remaingPrice"></p>원</li>
+				</ul>
+			</div>
+		</div>
+		<button id="PayBtn" class="PayBtn" data-toggle="modal" data-target="#myModal">결제하기</button>
+		
+		<div class="modal" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+	
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">결제</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+	
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="flex">
+							<div>
+								<img class="poster" th:alt="${schedule.show.showName}" th:src="${schedule.show.poster}">
+								<p>제목 : [[${schedule.show.showName}]]</p>
+								<p>상영일 : [[${#dates.format(schedule.showStart, 'yyyy-MM-dd')}]]</p>
+								<p>시작시간 : [[${#dates.format(schedule.showStart, 'HH:mm')}]]</p>
+								<p>좌석 : [[${#dates.format(schedule.showStart, 'HH:mm')}]]</p>
+							</div>
+							<form id="payForm" class="modalForm form-group totalPaymentBox" th:action="@{/reservation/getPayment}" method="post">
+								<div>결제 수단</div>
+								<div id="totalPayment"></div>
+								<input name="scheduleId" th:value="${schedule.scheduleId}">
+								<input name="seat" th:value="${checkedSeat}">
+								<input name="usedPoint">
+								<input name="payment">
+								<input name="totalPrice">
+							</form>
+						</div>
+					</div>
+					
+					<div class="modal-footer">
+						<button class="btn btn-showticat" id="submitBtn">결제하기</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div><!-- contents -->
 </div>
 </body>

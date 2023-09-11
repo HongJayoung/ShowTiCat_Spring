@@ -39,21 +39,21 @@
 							<td></td>
 						</tr>
 						<tr th:each="reserv:${reservList}">
-							<td>${resev.reservationId}</td>
-							<td>${resev.reservationDate }</td>
-							<td>${resev.schedule.show.showName}</td>
-							<td>${resev.schedule.showStart}</td>
-							<td>${resev.schedule.showStart}</td>
-							<td>${resev.schedule.show.category}</td>
+							<td>[[${reserv.reservationId}]]</td>
+							<td>[[${reserv.reservationDate}]]</td>
+							<td>[[${reserv.schedule.show.showName}]]</td>
+							<td>[[${reserv.schedule.showStart}]]</td>
+							<td>[[${reserv.schedule.showStart}]]</td>
+							<td>[[${reserv.schedule.show.category}]]</td>
 							<!-- 상태 -->
-							<td th:if="${resevation.payYn eq '예매완료'}" style="color: red;">
-								[[${resevation.payYn}]]
+							<td th:if="${reserv.payYn eq 'Y'}" style="color: red;">
+								예매완료
 							</td>
-							<td th:if="${resevation.payYn eq '관람완료'}" style="color: blue;">
-								[[${resevation.payYn}]]
+							<td th:if="${reserv.payYn eq '관람완료'}" style="color: blue;">
+								관람완료
 							</td>
-							<td th:if="${resevation.payYn eq '예매취소'}">
-								[[${resevation.payYn}]]
+							<td th:if="${reserv.payYn eq 'N'}">
+								취소
 							</td>
 							<!-- 상세보기 -->
 							<td>
