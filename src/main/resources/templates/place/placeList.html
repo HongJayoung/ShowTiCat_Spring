@@ -99,7 +99,11 @@ function goReservation() {
 						<p class="theaterInfo">[[${schedule.theater.theaterId}]]관 | [[${schedule.theater.theaterType}]] | 총 [[${schedule.theater.lastSeat}]]석</p>
 					</th:block>
 				</th:block>
-				<button class="btn btn-outline-showticat goReservation" th:schedule-id="${schedule.scheduleId}">[[${#dates.format(schedule.showStart, 'HH:mm')}]] <br>  /[[${schedule.theater.lastSeat}]]석</button>
+				<button class="btn btn-outline-showticat goReservation" th:schedule-id="${schedule.scheduleId}">
+					[[${#dates.format(schedule.showStart, 'HH:mm')}]] <br>
+					[[${schedule.countSeat}]]/[[${schedule.theater.lastSeat}]]석
+				
+				</button>
 			</th:block>
 
 		</div>

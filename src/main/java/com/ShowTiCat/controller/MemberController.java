@@ -1,5 +1,7 @@
 package com.ShowTiCat.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,10 +17,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ShowTiCat.repository.MemberRepository;
 import com.ShowTiCat.repository.PointRepository;
+import com.ShowTiCat.repository.ReservDetailRepository;
 import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ReviewRepository;
 import com.ShowTiCat.security.MemberServiceImpl;
 import com.ShowTiCat.vo.MemberVO;
+import com.ShowTiCat.vo.ReservDetailVO;
+import com.ShowTiCat.vo.ReservationVO;
 
 @Controller
 public class MemberController {
@@ -31,6 +37,9 @@ public class MemberController {
 	
 	@Autowired
 	ReservationRepository reRepo;
+	
+	@Autowired
+	ReservDetailRepository rdRepo;
 	
 	@Autowired
 	ReviewRepository rRepo;
@@ -47,6 +56,15 @@ public class MemberController {
 	public void myReservation(HttpSession session, Model model) {
 		MemberVO m = (MemberVO) session.getAttribute("member");
 		model.addAttribute("reservList", reRepo.findByMemberId(m.getMemberId()));
+	}
+	
+	@GetMapping("/myPage/myReservation/{reservationId}")
+	public String reservationDetail(@PathVariable Long reservationId, Model model) {
+		ReservationVO reservation = reRepo.findById(reservationId).get();
+		reservation.setSeat(rdRepo.findByReservationId(reservationId)); 
+		
+		model.addAttribute("reservation", reservation);
+		return "/myPage/reservDetail";
 	}
 	
 	@GetMapping("/myPage/myPoint")

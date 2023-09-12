@@ -43,7 +43,7 @@ function getCheckedSeat() {
 		<div id="seats">
 			<th:block  th:each="num : ${#numbers.sequence(1,schedule.theater.lastSeat)}">
 				<input class="checkSeat" type="checkbox" th:value="${num}" 
-							th:disabled="${#arrays.contains(reservedSeat, #strings.toString(num))}">
+							th:disabled="${#arrays.contains(schedule.seat, #strings.toString(num))}">
 			</th:block>
 		</div>
 		<button class="btn btn-showticat" id="goPayBtn">결제하기</button>
