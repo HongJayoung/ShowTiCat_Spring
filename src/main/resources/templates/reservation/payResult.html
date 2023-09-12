@@ -6,26 +6,26 @@
 <head>
 <meta charset="UTF-8">
 
-<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
-
-<title>ShowTiCat | MYPAGE</title>
+<title>ShowTiCat | RESERVATION</title>
 
 <style>
-#goodByeMsg {
-	text-align: center;
-    padding-top: 100px;
-}
+
 </style>
+<script>
+$(function() {
+	
+})
+
+
+</script>
 </head>
 
 <body>
 <div layout:fragment="content">
 	<div class="contents">
-		<div th:replace="~{/myPage/side}"></div>
-		<div id="goodByeMsg">
-			<p>ShowTiCat을 이용해주셔서 감사합니다.</p>
-			<button class="btn btn-sm btn-outline-showticat">메인으로</button>
-		</div>
+		<h1>결제하기</h1>
+		결제완료!!!!!!
+		[[${reservation}]]
 	</div><!-- contents -->
 </div>
 </body>

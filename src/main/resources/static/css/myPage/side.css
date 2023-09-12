@@ -3,10 +3,6 @@
 관심매장, 예매, 회원탈퇴
 =============================================================================*/
 
-.mySide div {
-    height: fit-content;
-}
-
 .mySide {
 	position : absolute;
 	top:0;
@@ -22,7 +18,7 @@
 }
 
 .mySide div {
-	height: 5%;
+	height: fit-content;
 	margin-bottom: 40px;
 }
 

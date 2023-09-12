@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+
+<title>ShowTiCat | MYPAGE</title>
+
+<script>
+$(function() {
+	$("#checkPwBtn").on("click", checkPw);
+})
+
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+function checkPw() {
+	var from = '[[${from}]]/';
+	var pw = $("#pw").val().trim();
+	
+	if(from == "deleteAccount/") {
+		if(!confirm("정말 탈퇴하시겠습니까?\n삭제된 정보는 복구되지않습니다.")) return;
+	}
+	
+	if(pw != '') {
+		$.ajax({
+			type:"post",
+			url:"/myPage/checkPw",
+			data:{"pw":pw},
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success: function(resData) {
+				if(resData==1) {
+					location.href = "/myPage/"+from;
+				}else {
+					alert("비밀번호를 확인해주세요.");
+					$("#pw").focus();
+				}
+			}
+		});
+	} else {
+		$("#pw").focus();
+	}
+}
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<div th:replace="~{/myPage/side}"></div>
+		<h2 th:if="${from == 'myInfo'}">MY INFO</h2>
+		<h2 th:if="${from == 'deleteAccount'}">DELETE ACCOUNT</h2>
+		
+		<div class="form-group">
+			<label>비밀번호를 입력해주세요.</label>
+			<input class="form-control" type="password" name="pw" id="pw">
+		</div>
+		<button class="btn btn-showticat" id="checkPwBtn">확인</button>
+	</div><!-- contents -->
+</div>
+</body>
+</html>

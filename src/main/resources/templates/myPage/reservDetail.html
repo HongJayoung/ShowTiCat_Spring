@@ -10,23 +10,18 @@
 
 <title>ShowTiCat | MYPAGE</title>
 
-<style>
-#goodByeMsg {
-	text-align: center;
-    padding-top: 100px;
-}
-</style>
+<script>
+</script>
 </head>
 
 <body>
 <div layout:fragment="content">
 	<div class="contents">
 		<div th:replace="~{/myPage/side}"></div>
-		<div id="goodByeMsg">
-			<p>ShowTiCat을 이용해주셔서 감사합니다.</p>
-			<button class="btn btn-sm btn-outline-showticat">메인으로</button>
+		<h2>MY RESERVATION</h2>
+		
+		[[${reservation}]]
 		</div>
 	</div><!-- contents -->
-</div>
 </body>
 </html>

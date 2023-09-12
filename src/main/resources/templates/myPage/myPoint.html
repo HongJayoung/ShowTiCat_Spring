@@ -20,7 +20,25 @@
 	<div class="contents">
 		<div th:replace="~{/myPage/side}"></div>
 		<h2>POINT</h2>
-		[[${pointDetail}]]
+		<table th:if="${pointDetail != null}" class="table">
+				<thead id="thead">
+					<tr>
+						<th></th>
+						<th>적립/사용 상세내역</th>
+						<th>적립/사용 포인트</th>
+						<th>적립/사용 일자</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="point:${pointDetail}">
+						<td>[[${pointStat.count}]]</td>
+						<td>[[${point.pointDetail}]]</td>
+						<td th:if="${point.point < 0}" style="color: red;">[[${point.point * (-1)}]]</td>
+						<td th:if="${point.point >= 0}">[[${point.point}]]</td>
+						<td>[[${point.pointDate}]]</td>
+					</tr>
+				</tbody>
+			</table>
 	</div><!-- contents -->
 </div>
 </body>

@@ -1,10 +1,12 @@
 package com.ShowTiCat.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ShowTiCat.repository.CastDetailRepository;
 import com.ShowTiCat.repository.CastRepository;
+import com.ShowTiCat.repository.MemberRepository;
 import com.ShowTiCat.repository.PlaceRepository;
 import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
@@ -30,6 +33,7 @@ import com.ShowTiCat.util.DateUtil;
 import com.ShowTiCat.vo.CastDetailVO;
 import com.ShowTiCat.vo.CastMultikey;
 import com.ShowTiCat.vo.CastVO;
+import com.ShowTiCat.vo.MemberVO;
 import com.ShowTiCat.vo.PlaceVO;
 import com.ShowTiCat.vo.ScheduleVO;
 import com.ShowTiCat.vo.ShowVO;
@@ -38,6 +42,9 @@ import com.ShowTiCat.vo.TheaterVO;
 @Controller
 public class AdminController {
 
+	@Autowired
+	MemberRepository mRepo;
+	
 	@Autowired
 	ShowRepository sRepo;
 	
@@ -63,7 +70,9 @@ public class AdminController {
 	AwsS3 s3;
 	
 	@GetMapping("/ShowTiCat/admin")
-	public String admin() {
+	public String admin(Principal principal, HttpSession session) {
+		MemberVO m = mRepo.findById(principal.getName()).orElse(null);
+		session.setAttribute("member", m);
 		return "/admin/admin";
 	}
 	

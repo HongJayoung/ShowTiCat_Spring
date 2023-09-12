@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+<title>ShowTiCat | FIND ID</title>
+
+<script>
+$(function() {
+	$("#findIdForm").on("submit", isEmpty);
+	$("#select").on("change",selectChange);
+	$("#login").on("click", login);
+	$("#findPW").on("click", findPW);
+})
+
+function selectChange() {
+	 if ($('#select').val() == 'directly') {
+        $('#email2').attr("readonly", false);
+        $('#email2').val("");
+        $('#email2').focus();
+    } else {
+        $('#email2').val($('#select').val());
+        $('#email2').attr("readonly",true);
+    }
+}
+
+function login() {
+	location.href="/ShowTiCat/login";
+}
+
+function findPW() {
+	location.href="/ShowTiCat/findPw";
+}
+
+function isEmpty() {
+	var id = $("#name").val();
+	var email1 = $("#email1").val();
+	var email2 = $("#email2").val();
+	
+	if(id==null||id=='') {
+		$("#name").focus();
+		return false;
+	}else if(email1==null||email1=='') {
+		$("#email1").focus();
+		return false;
+	}else if(email2==null||email2=='') {
+		$("#email2").focus();
+		return false;
+	}
+}
+</script>
+
+</head>
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<form th:action="@{/ShowTiCat/findId}" method="post" id="findIdForm">
+			<div class="form-group">
+				<label>이름</label>
+				<input class="form-control" type="text" name="name" id="name">
+			</div>
+			
+			<div class="form-group">
+				<label>이메일</label>
+				<input class="form-control" type="text" name="email1" id="email1" placeholder="이메일">
+				<span>@</span>
+				<input class="form-control" name="email2" id="email2" readonly="readonly">
+				<select class="form-control" id="select">
+					<option value="" disabled selected>E-Mail 선택</option>
+					<option>naver.com</option>
+					<option>gmail.com</option>
+					<option>nate.com</option>
+					<option>hanmail.net</option>
+					<option value="directly">직접 입력하기</option>
+				</select>
+			</div>
+			
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input class="btn btn-showticat" type="submit" value="아이디 찾기">
+		</form> <hr>
+		<button id="login" class="btn btn-outline-showticat">로그인</button>
+		<button id="findPW" class="btn btn-outline-showticat">비밀번호 찾기</button>
+	</div>
+</div>
+</body>
+</html>

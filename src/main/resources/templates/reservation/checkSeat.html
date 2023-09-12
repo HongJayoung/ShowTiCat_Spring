@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<title>ShowTiCat | RESERVATION</title>
+
+<script>
+$(function() {
+	$(".checkSeat").change(checkSeat);
+	$("#goPayBtn").click(getCheckedSeat);
+})
+
+function checkSeat() {
+	var seatNum = $(this).val();
+	console.log(seatNum)
+}
+
+function getCheckedSeat() {
+	var scheduleId = $("#scheduleId").val();
+	
+    var arr = [];
+    var seat = $(".checkSeat");
+    for (var i = 0; i < seat.length; i++) {
+      if (seat[i].checked == true) {
+      	arr.push(seat[i].value);
+      }
+    }
+
+	location.href="/reservation/"+scheduleId+"/"+arr;
+}
+</script>
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h1>예매하기</h1>
+		<input type="hidden" id="scheduleId" th:value="${schedule.scheduleId}">
+		<div id="seats">
+			<th:block  th:each="num : ${#numbers.sequence(1,schedule.theater.lastSeat)}">
+				<input class="checkSeat" type="checkbox" th:value="${num}" 
+							th:disabled="${#arrays.contains(schedule.seat, #strings.toString(num))}">
+			</th:block>
+		</div>
+		<button class="btn btn-showticat" id="goPayBtn">결제하기</button>
+	</div><!-- contents -->
+</div>
+</body>
+</html>

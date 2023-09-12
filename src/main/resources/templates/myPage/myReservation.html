@@ -11,7 +11,14 @@
 <title>ShowTiCat | MYPAGE</title>
 
 <script>
+$(function() {
+	$(".detailBtn").click(goDetail);
+})
 
+function goDetail() {
+	var reservationId = $(this).attr("reserv-id");
+	location.href = "/myPage/myReservation/" + reservationId;
+}
 </script>
 </head>
 
@@ -34,32 +41,30 @@
 							<td>공연/영화 제목</td>
 							<td>관람일</td>
 							<td>시작시간</td>
-							<td>카테고리</td>
-							<td>현재상태</td>
+							<td></td>
 							<td></td>
 						</tr>
 						<tr th:each="reserv:${reservList}">
-							<td>${resev.reservationId}</td>
-							<td>${resev.reservationDate }</td>
-							<td>${resev.schedule.show.showName}</td>
-							<td>${resev.schedule.showStart}</td>
-							<td>${resev.schedule.showStart}</td>
-							<td>${resev.schedule.show.category}</td>
+							<td>[[${reserv.reservationId}]]</td>
+							<td>[[${#dates.format(reserv.reservationDate, 'yyyy-MM-dd HH:mm')}]]</td>
+							<td>[[${reserv.schedule.show.showName}]]</td>
+							<td>[[${#dates.format(reserv.schedule.showStart, 'yyyy-MM-dd')}]]</td>
+							<td>[[${#dates.format(reserv.schedule.showStart, 'HH:mm')}]]</td>
 							<!-- 상태 -->
-							<td th:if="${resevation.payYn eq '예매완료'}" style="color: red;">
-								[[${resevation.payYn}]]
+							<td th:if="${reserv.payYn eq 'Y'}" style="color: red;">
+								예매완료
 							</td>
-							<td th:if="${resevation.payYn eq '관람완료'}" style="color: blue;">
-								[[${resevation.payYn}]]
+							<td th:if="${reserv.payYn eq '관람완료'}" style="color: blue;">
+								관람완료
 							</td>
-							<td th:if="${resevation.payYn eq '예매취소'}">
-								[[${resevation.payYn}]]
+							<td th:if="${reserv.payYn eq 'N'}">
+								취소
 							</td>
 							<!-- 상세보기 -->
 							<td>
-								<button>상세보기</button>
+								<button id="detailBtn" class="btn btn-outline-showticat detailBtn" th:reserv-id="${reserv.reservationId}">상세보기</button>
 							</td>
-							</tr>
+						</tr>
 					</table>
 				</div>
 			</div>
