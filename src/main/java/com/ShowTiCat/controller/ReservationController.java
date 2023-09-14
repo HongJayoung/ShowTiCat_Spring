@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,8 @@ import com.ShowTiCat.repository.PointRepository;
 import com.ShowTiCat.repository.ReservDetailRepository;
 import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
+import com.ShowTiCat.repository.ShowRepository;
+import com.ShowTiCat.util.DateUtil;
 import com.ShowTiCat.vo.MemberVO;
 import com.ShowTiCat.vo.PointVO;
 import com.ShowTiCat.vo.ReservDetailMultikey;
@@ -29,6 +32,9 @@ public class ReservationController {
 	
 	@Autowired
 	MemberRepository mRepo;
+	
+	@Autowired
+	ShowRepository sRepo;
 	
 	@Autowired
 	ScheduleRepository scRepo;
@@ -44,7 +50,8 @@ public class ReservationController {
 	
 	@GetMapping("/reservation")
 	public String reservationList(Model model) {
-		model.addAttribute("scheduleList", scRepo.findAll());
+		model.addAttribute("weekDate", DateUtil.getWeekDate());
+		model.addAttribute("showList", sRepo.findAll(Sort.by("showName")));
 		return "/reservation/scheduleList";
 	}
 	

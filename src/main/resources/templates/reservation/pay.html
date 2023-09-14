@@ -112,7 +112,7 @@ function getPaymentInfo() {
 }
 
 function submit() {
-	$("#payForm").submit();
+	$("#totalPaymentBox").submit();
 }
 </script>
 </head>
@@ -171,16 +171,16 @@ function submit() {
 								<p>제목 : [[${schedule.show.showName}]]</p>
 								<p>상영일 : [[${#dates.format(schedule.showStart, 'yyyy-MM-dd')}]]</p>
 								<p>시작시간 : [[${#dates.format(schedule.showStart, 'HH:mm')}]]</p>
-								<p>좌석 : [[${#dates.format(schedule.showStart, 'HH:mm')}]]</p>
+								<p>좌석 : [[${checkedSeat}]]</p>
 							</div>
-							<form id="payForm" class="modalForm form-group totalPaymentBox" th:action="@{/reservation/getPayment}" method="post">
+							<form id="totalPaymentBox" class="modalForm form-group totalPaymentBox" th:action="@{/reservation/getPayment}" method="post">
 								<div>결제 수단</div>
 								<div id="totalPayment"></div>
-								<input name="scheduleId" th:value="${schedule.scheduleId}">
-								<input name="seat" th:value="${checkedSeat}">
-								<input name="usedPoint">
-								<input name="payment">
-								<input name="totalPrice">
+								<input type="hidden" name="scheduleId" th:value="${schedule.scheduleId}">
+								<input type="hidden" name="seat" th:value="${checkedSeat}">
+								<input type="hidden" name="usedPoint">
+								<input type="hidden" name="payment">
+								<input type="hidden" name="totalPrice">
 							</form>
 						</div>
 					</div>

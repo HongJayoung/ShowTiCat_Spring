@@ -11,7 +11,14 @@
 <title>ShowTiCat | RESERVATION</title>
 
 <script>
+$(function() {
+	$(".show").click(getInfoByShow);
+})
 
+function getInfoByShow() {
+	var showCode = $(this).attr("show-code");
+	console.log(showCode);
+}
 </script>
 </head>
 
@@ -19,7 +26,25 @@
 <div layout:fragment="content">
 	<div class="contents">
 		<h1>예매하기</h1>
-		[[${scheduleList}]]
+		<hr>
+		<div id="scheduleBox" class="scheduleBox">
+			<ul id="showList" class="showList">
+				<li class="listTitle">영화/공연</li>
+				<li th:each="show:${showList}" id="show" class="show" th:show-code="${show.showCode}">
+					<a href="#">[[${show.showName}]]</a>
+				</li>
+			</ul>
+			<ul id="placeList" class="placeList">
+				<li class="listTitle">극장!</li>
+			</ul>
+			<ul id="dateList" class="dateList">
+				<li class="listTitle">날짜</li>
+				<li th:each="date:${weekDate}" class='getSchedule' th:date="${date}">[[${date}]]</li>
+			</ul>
+			<ul id="scheduleList" class="scheduleList">
+				<li class="listTitle">스케줄~~</li>
+			</ul>
+		</div>
 	</div><!-- contents -->
 </div>
 </body>
