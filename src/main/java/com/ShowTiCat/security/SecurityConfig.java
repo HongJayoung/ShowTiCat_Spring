@@ -54,9 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.headers().frameOptions().sameOrigin();
 		
 		http.authorizeRequests()
-				 //.antMatchers("/auth/**", "/login/**", "/oauth2/**",  "/index", "/kakao/**", "/**").access("hasRole('USER')") //USER 권한을 가진 경우 접속 허용
-				.antMatchers("/**").permitAll(); //누구나 접속 가능
-				//.anyRequest().authenticated() //위에서 설정한 경로 이외의 나머지는 무조건 인증을 완료해야 접근이 가능
+				 //.antMatchers("/**").access("hasRole('USER')") //USER 권한을 가진 경우 접속 허용
+				.antMatchers("/ShowTiCat/**", "/show/**",  "/place/**", "/reservation").permitAll() //누구나 접속 가능
+				.anyRequest().authenticated(); //위에서 설정한 경로 이외의 나머지는 무조건 인증을 완료해야 접근이 가능
 				
 		http.formLogin()
 				.loginPage("/ShowTiCat/login") //로그인 페이지
@@ -65,7 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					new AuthenticationSuccessHandler() { // 익명 객체 사용
 						@Override
 						public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-							System.out.println("authentication: " + authentication.getName());
 							if(authentication.getName().equals("admin")) {
 								response.sendRedirect("/ShowTiCat/admin");
 							} else {
