@@ -55,7 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.authorizeRequests()
 				 //.antMatchers("/**").access("hasRole('USER')") //USER 권한을 가진 경우 접속 허용
-				.antMatchers("/ShowTiCat/**", "/show/**",  "/place/**", "/reservation").permitAll() //누구나 접속 가능
+				.antMatchers("/ShowTiCat/**", "/show/**",  "/place/**", "/schedule/**", "/reservation").permitAll() //누구나 접속 가능
 				.anyRequest().authenticated(); //위에서 설정한 경로 이외의 나머지는 무조건 인증을 완료해야 접근이 가능
 				
 		http.formLogin()

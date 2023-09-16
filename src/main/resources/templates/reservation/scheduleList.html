@@ -12,12 +12,81 @@
 
 <script>
 $(function() {
-	$(".show").click(getInfoByShow);
+	
+	$(".show").click(setShow);
+	$(".place").click(setPlace);
+	$(".date").click(setDate);
 })
 
-function getInfoByShow() {
+var token = $("meta[name='_csrf']").attr("content");
+var header = $("meta[name='_csrf_header']").attr("content");
+
+var show = "[[${showCode}]]";
+var place = "";
+var date = "";
+function setShow() {
+	$(this).siblings().removeClass("selected");
+	$(this).addClass("selected");
+	
 	var showCode = $(this).attr("show-code");
-	console.log(showCode);
+	show = showCode;
+	getSchedule();
+}
+
+function setPlace() {
+	$(this).siblings().removeClass("selected");
+	$(this).addClass("selected");
+	
+	var placeId = $(this).attr("place-id");
+	place = placeId;
+	getSchedule();
+}
+
+function setDate() {
+	$(this).siblings().removeClass("selected");
+	$(this).addClass("selected");
+	
+	var d = $(this).attr("date");
+	date = d;
+	getSchedule();
+}
+
+function getSchedule() {
+	if(show == "" || place == "" || date == "") {
+	} else {
+		$.ajax({
+			type:"post",
+			url: "/schedule/findSchedule/"+show+"/"+place+"/"+date,
+			beforeSend : function(xhr){
+				xhr.setRequestHeader(header, token);
+			},
+			success:function(resData) {
+				if(!resData?.length) {
+					$("#infoText").show().html("해당 일자에 상영중인 영화/공연이 없습니다.");
+				}  else {
+					let str = "";
+					for(var i = 0;i < resData.length;i++) {
+						str += "<li>" + dateFormat(resData[i].showStart) +"</li>";
+					}
+					
+					$("#scheduleTitle").siblings().hide().after(str);
+					str = "";
+				}
+			}
+		})
+	}
+}
+
+function dateFormat(date) {
+	var d = new Date(date);
+	
+	var hour = d.getHours();
+	var minute = d.getMinutes();
+
+    hour = hour >= 10 ? hour : '0' + hour;
+    minute = minute >= 10 ? minute : '0' + minute;
+
+    return hour + ':' + minute;
 }
 </script>
 </head>
@@ -35,14 +104,20 @@ function getInfoByShow() {
 				</li>
 			</ul>
 			<ul id="placeList" class="placeList">
-				<li class="listTitle">극장!</li>
+				<li id="placeTitle" class="listTitle">극장</li>
+				<li th:each="place:${placeList}" id="place" class="place" th:place-id="${place.placeId}">
+					<a href="#">[[${place.placeName}]]</a>
+				</li>
 			</ul>
 			<ul id="dateList" class="dateList">
 				<li class="listTitle">날짜</li>
-				<li th:each="date:${weekDate}" class='getSchedule' th:date="${date}">[[${date}]]</li>
+				<li th:each="date:${weekDate}" id="date" class="date" th:date="${date}">
+					<a href="#">[[${date}]]</a>
+				</li>
 			</ul>
 			<ul id="scheduleList" class="scheduleList">
-				<li class="listTitle">스케줄~~</li>
+				<li id="scheduleTitle" class="listTitle">스케줄</li>
+				<li id="infoText">영화/공연, 극장, 날짜를 선택해주세요.</li>
 			</ul>
 		</div>
 	</div><!-- contents -->

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.ShowTiCat.repository.MemberRepository;
+import com.ShowTiCat.repository.PlaceRepository;
 import com.ShowTiCat.repository.PointRepository;
 import com.ShowTiCat.repository.ReservDetailRepository;
 import com.ShowTiCat.repository.ReservationRepository;
@@ -46,12 +47,16 @@ public class ReservationController {
 	ReservDetailRepository rdRepo;
 	
 	@Autowired
+	PlaceRepository placeRepo;
+	
+	@Autowired
 	PointRepository pRepo;
 	
 	@GetMapping("/reservation")
 	public String reservationList(Model model) {
 		model.addAttribute("weekDate", DateUtil.getWeekDate());
 		model.addAttribute("showList", sRepo.findAll(Sort.by("showName")));
+		model.addAttribute("placeList", placeRepo.findAll(Sort.by("placeName")));
 		return "/reservation/scheduleList";
 	}
 	

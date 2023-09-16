@@ -11,7 +11,14 @@
 <title>ShowTiCat | SHOW</title>
 
 <script>
+$(function() {
+	$("#reservBtn").click(goReservation);
+})
 
+function goReservation() {
+	var showCode = "[[${show.showCode}]]";
+	/* location.href = "/reservation/" +showCode; */
+}
 </script>
 </head>
 

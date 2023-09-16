@@ -29,6 +29,11 @@
 .listTitle {
 	font-weight: bold;
 	text-align: center;
-	color: #ffffff;
-	background-color: #1e7e34;
+    border-bottom: 1px solid #1e7e34;
+}
+
+.selected {
+	background-color: #1e7e3412;
+    border-radius: 0.15em;
+    font-weight: bold;
 }
