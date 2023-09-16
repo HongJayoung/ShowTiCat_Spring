@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{/layout/layout.html}">
+<head>
+<meta charset="UTF-8">
+
+<title>ShowTiCat</title>
+
+<style>
+.emptyResult {
+	font-weight: bold;
+	margin-top: 1rem;
+}
+
+.showBox {
+	display:flex;
+}
+
+.poster {
+	 width:150px;
+	 height:225px;
+	 margin: 10px 5px;
+}
+
+.box {
+	display: flex;
+	flex-direction: column;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.title {
+	font-size: 18px;
+    font-weight: bold;
+}
+</style>
+
+<script type="text/javascript">
+	
+</script>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+	<div class="contents">
+		<h3>검색결과</h3>
+			<p th:if="${#lists.isEmpty(showList)}" class="emptyResult">"[[${word}]]" 검색결과가 없습니다.</p>
+			
+			<div th:if="${!#lists.isEmpty(showList)}" class="resultBox">
+				<th:block th:each="show:${showList}">
+					<div class="showBox">
+						<img class="poster" th:alt="${show.showName}" th:src="${show.poster}">
+						<div class="box">
+							<div class="infoBox">
+								<p class="title">[[${show.showName}]]</p>
+								<p class="info">[[${show.openingDate}]] OPEN</p>
+							</div>
+							<div class="btnBox">
+								<button class="btn btn-showticat detailBtn" th:code="${show.showCode}">상세보기</button>
+								<button class="btn btn-outline-showticat reservBtn" th:code="${show.showCode}">예매하기</button>
+							</div>
+						</div>
+					</div>
+					<hr>
+				</th:block>
+			
+			</div>
+		
+	</div>
+</div>
+</body>
+</html>

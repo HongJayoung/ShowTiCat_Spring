@@ -87,8 +87,8 @@
                     <li></li>
                     <li></li>
                     <li class="search">
-                        <form action="${path}/jayoung/result.do" id="formH">
-							<input type="text" name="word" id="searchH" th:value="${session.word}">
+                        <form th:action="@{/ShowTiCat/search}" id="formH">
+							<input type="text" name="word" id="searchH" th:value="${word}">
 							<input class="btn btn-light btn-sm" type="submit" value="검색">
 						</form>
                     </li>
