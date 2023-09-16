@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+.scheduleBox {
+	display: flex;
+	justify-content: space-between;
+}
+
+.showList {
+	width: 25%;
+}
+
+.placeList {
+	width: 30%;
+}
+
+.dateList {
+	width: 14%;
+}
+
+.scheduleList {
+	width: 30%;
+}
+
+
+.showList li, .placeList li, .dateList li, .scheduleList li {
+	padding: 7px;
+}
+
+.listTitle {
+	font-weight: bold;
+	text-align: center;
+    border-bottom: 1px solid #1e7e34;
+}
+
+.selected {
+	background-color: #1e7e3412;
+    border-radius: 0.15em;
+    font-weight: bold;
+}

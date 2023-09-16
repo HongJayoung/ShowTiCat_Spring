@@ -29,4 +29,8 @@ public interface ScheduleRepository extends JpaRepository<ScheduleVO, Long>{
 	@Query(value = "select * from schedule where place_place_id = ?1 and show_start >= ?2 and show_start < ?3 "
 							+ "order by show_show_code, theater_theater_id, show_start", nativeQuery = true)
 	List<ScheduleVO> findByPlaceAndShowStartBetween(PlaceVO place, Date day, Date dayAfter);
+	
+	@Query(value = "select * from schedule where show_show_code = ?1 and  place_place_id = ?2 and show_start >= ?3 and show_start < ?4 "
+			+ "order by show_show_code, theater_theater_id, show_start", nativeQuery = true)
+	List<ScheduleVO> findSchedule(Long showCode, Long placeId, Date day, Date dayAfter);
 }

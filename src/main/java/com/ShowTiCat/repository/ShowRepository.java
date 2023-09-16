@@ -11,4 +11,6 @@ public interface ShowRepository extends JpaRepository<ShowVO, Long>{
 
 	@Query(value = "select * from show where category = ?1", nativeQuery = true)
 	List<ShowVO> findByCategory(String category);
+
+	List<ShowVO> findByShowNameContaining(String word);
 }
