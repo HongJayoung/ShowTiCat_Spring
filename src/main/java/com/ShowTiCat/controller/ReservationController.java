@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ShowTiCat.repository.MemberRepository;
 import com.ShowTiCat.repository.PlaceRepository;
@@ -53,7 +54,8 @@ public class ReservationController {
 	PointRepository pRepo;
 	
 	@GetMapping("/reservation")
-	public String reservationList(Model model) {
+	public String reservationList(@RequestParam(required = false) Long showCode, Model model) {
+		if(showCode != null) model.addAttribute("showCode", showCode);
 		model.addAttribute("weekDate", DateUtil.getWeekDate());
 		model.addAttribute("showList", sRepo.findAll(Sort.by("showName")));
 		model.addAttribute("placeList", placeRepo.findAll(Sort.by("placeName")));

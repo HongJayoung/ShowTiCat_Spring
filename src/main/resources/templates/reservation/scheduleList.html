@@ -12,7 +12,7 @@
 
 <script>
 $(function() {
-	
+	getShowCode();
 	$(".show").click(setShow);
 	$(".place").click(setPlace);
 	$(".date").click(setDate);
@@ -21,9 +21,21 @@ $(function() {
 var token = $("meta[name='_csrf']").attr("content");
 var header = $("meta[name='_csrf_header']").attr("content");
 
-var show = "[[${showCode}]]";
+var show = "";
 var place = "";
 var date = "";
+
+function getShowCode() {
+	show = "[[${showCode}]]";
+	
+	if(show != "") {
+		var showList = $(".show");
+		for(var i = 0;i < showList.length;i++) {
+			if($(showList[i]).attr("show-code") == show) $(showList[i]).addClass("selected");
+		}
+	}
+}
+
 function setShow() {
 	$(this).siblings().removeClass("selected");
 	$(this).addClass("selected");
@@ -62,15 +74,16 @@ function getSchedule() {
 			},
 			success:function(resData) {
 				if(!resData?.length) {
-					$("#infoText").show().html("해당 일자에 상영중인 영화/공연이 없습니다.");
+					$("#scheduleTitle").siblings().addClass("hide");
+					$("#infoText").removeClass("hide").html("해당 일자에 상영중인 영화/공연이 없습니다.");
 				}  else {
 					let str = "";
 					for(var i = 0;i < resData.length;i++) {
-						str += "<li>" + dateFormat(resData[i].showStart) +"</li>";
+						str += "<li><a href='#'>" + dateFormat(resData[i].showStart) +"</a></li>";
 					}
 					
-					$("#scheduleTitle").siblings().hide().after(str);
-					str = "";
+					$("#scheduleTitle").siblings().addClass("hide");
+					$("#scheduleTitle").after(str);
 				}
 			}
 		})

@@ -95,14 +95,6 @@
                 </ul>
             </div><!-- contens -->
         </div><!-- nav -->
-        
-        <script>
-		$(function() {
-			$("#logout").click(function() {
-				$("#logoutForm").submit();
-			});
-		})
-		</script>
 		
     </div><!-- header -->
 
@@ -114,7 +106,7 @@
                 <!-- 로고 및 사이트 이름 -->
                 <h3>ADMIN PAGE</h3>
                 <h1>
-                    <a th:href="@{/ShowTiCat}">
+                    <a th:href="@{/logout}">
 	                    <img th:src="@{/images/showticat_logo.png}" alt="ShowTiCat">
 	                    <!-- 사이트 이름 -->
                     </a>
