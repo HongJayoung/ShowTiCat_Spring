@@ -3,23 +3,39 @@
 .table {
 	table-layout: fixed;
 }
-.ct {
-	width: 7%;
-}
 
- .n, .d {
-	width: 10%;
-}
-
-.s {
-	width: 40%;
+td {
 	overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.c, .t, .p {
-	width: 13%;
+.ct {
+	width: 7%;
+}
+
+ .n, .d {
+	width: 12%;
+}
+
+.s {
+	width: 40%;
+}
+
+.c {
+	width: 11%;
+}
+
+.t {
+	width: 12%;
+}
+
+.rt {
+	width: 10%;
+}
+
+.p {
+	width: 9%;
 }
 	
 .showDetail:hover {
