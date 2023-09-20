@@ -208,15 +208,16 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin/updateSchedule")
-	public String updateSchedule(Long scheduleId, Long showCode, Long theaterId, String startTime) {
+	public String updateSchedule(Long scheduleId, Long showCode, Long theaterId, String showStart) {
 		ScheduleVO schedule = scRepo.findById(scheduleId).get();
-		System.out.println("startTime => "+startTime);
 		
+		Date d = DateUtil.convertToDateTime(showStart);
 		ShowVO s = sRepo.findById(showCode).get();
 		TheaterVO t = tRepo.findById(theaterId).get();
 		
 		schedule.setShow(s);
 		schedule.setTheater(t);
+		schedule.setShowStart(d);
 		
 		scRepo.save(schedule);
 		
