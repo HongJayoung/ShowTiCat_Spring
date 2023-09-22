@@ -6,11 +6,32 @@
 <head>
 <meta charset="UTF-8">
 
-<link rel="stylesheet" th:href="@{/css/myPage/myPage.css}" />
+<link rel="stylesheet" th:href="@{/css/myPage/reservDetail.css}" />
 
 <title>ShowTiCat | MYPAGE</title>
 
 <script>
+$(function() {
+	$("#goShowDetail").click(goShowDetail);
+	$("#cancelReserv").click(cancelReserv);
+	$("#goReservList").click(goReservList);
+})
+
+function goShowDetail() {
+	var showCode = "[[${reservation.schedule.show.showCode}]]";
+	location.href = "/show/detail/" + showCode;
+}
+
+function cancelReserv() {
+	if(confirm("예매내역을 취소하시겠습니까?")){
+		var reservationId = "[[${reservation.reservationId}]]";
+		location.href = "/myPage/cancelReserv/" + reservationId;
+	}
+}
+
+function goReservList() {
+	location.href = "/myPage/myReservation";
+}
 </script>
 </head>
 
@@ -18,10 +39,67 @@
 <div layout:fragment="content">
 	<div class="contents">
 		<div th:replace="~{/myPage/side}"></div>
-		<h2>MY RESERVATION</h2>
-		
-		[[${reservation}]]
+		<h5>예매내역 확인·취소</h5>
+		<div class="title">
+			[[${reservation.schedule.show.showName}]] - [[${reservation.schedule.show.category}]]
 		</div>
-	</div><!-- contents -->
+		<div class="infoBox">
+			<div class="posterBox">
+				<img class="poster" th:alt="${reservation.schedule.show.showName}" th:src="${reservation.schedule.show.poster}">
+				<button id="goShowDetail" class="btn btn-outline-showticat">상세보기</button>
+			</div>
+			<div class="info">
+				<table class="infoTable">
+					<tr>
+						<td>예매자</td>
+						<td>[[${reservation.member.name}]]</td>
+					</tr>
+					<tr>
+						<td>예약번호</td>
+						<td>[[${reservation.reservationId}]]</td>
+					</tr>
+					<tr>
+						<td>관람일</td>
+						<td>[[${#dates.format(reservation.schedule.showStart, 'yyyy-MM-dd HH:mm')}]]</td>
+					</tr>
+					<tr>
+						<td>장소</td>
+						<td>ShowTiCat [[${reservation.schedule.place.placeName}]]</td>
+					</tr>
+					<tr>
+						<td>좌석</td>
+						<td id="seat">[[${#strings.substring(reservation.seat,1,#strings.length(reservation.seat)-1)}]]</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div>
+			<h5>결제내역</h5>
+			<div class="payInfo">
+				<table class="infoTable">
+					<tr>
+						<td>예매일</td>
+						<td>[[${#dates.format(reservation.reservationDate, 'yyyy-MM-dd')}]]</td>
+						<td>예매상태</td>
+						<td th:if="${reservation.payYn eq 'Y'}">예매</td>
+						<td th:if="${reservation.payYn eq 'N'}" style="color: red;">취소</td>
+					</tr>
+					<tr>
+						<td>결제수단</td>
+						<td>[[${reservation.payment}]]</td>
+						<td>결제금액</td>
+						<td>[[${reservation.totalPrice}]]원</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		
+		<div class="btnBox">
+			<button id="cancelReserv" class="btn btn-showticat" th:if="${reservation.payYn eq 'Y'}">취소하기</button>
+			<button id="goReservList" class="btn btn-outline-showticat">목록으로</button>
+		</div>
+	</div>
+</div>
 </body>
 </html>

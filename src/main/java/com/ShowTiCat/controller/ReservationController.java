@@ -87,19 +87,19 @@ public class ReservationController {
 		reservation.setSchedule(schedule);
 		reservation.setPayYn("Y");
 		
-		Long totalPoint = reservation.getTotalPrice();
+		Long totalPrice = reservation.getTotalPrice();
 		if(usedPoint != null) {
 			member.setMPoint(member.getMPoint()-usedPoint);
-			totalPoint -= usedPoint;
-			PointVO p = PointVO.builder().member(member).point(usedPoint*-1).pointDetail("영화/공연 예매").build();
+			totalPrice -= usedPoint;
+			PointVO p = PointVO.builder().member(member).point(usedPoint*-1).pointDetail("영화/공연 예매 시 사용").build();
 			pRepo.save(p); 
 		}
 		
-		PointVO plusPoint = PointVO.builder().member(member).point((long) (totalPoint * 0.05)).pointDetail("영화/공연 예매").build();
+		PointVO plusPoint = PointVO.builder().member(member).point((long) (totalPrice * 0.05)).pointDetail("영화/공연 예매 적립").build();
 		PointVO point = pRepo.save(plusPoint);
 		reservation.setPoint(point);
 		
-		member.setMPoint(member.getMPoint()+(long) (totalPoint * 0.05));
+		member.setMPoint(member.getMPoint()+(long) (totalPrice * 0.05));
 		mRepo.save(member);
 		
 		session.setAttribute("member", member);
@@ -107,10 +107,10 @@ public class ReservationController {
 		ReservationVO r = rRepo.save(reservation);
 		
 		String strSeat = seat.substring(1, seat.length()-1);
-		String[] ArrayStr = strSeat.split(",");
+		String[] arrayStr = strSeat.split(",");
 		
 		ReservDetailMultikey multikey = ReservDetailMultikey.builder().reservation(r).build();
-		for(String s:ArrayStr) {
+		for(String s:arrayStr) {
 			multikey.setSeatNum(s.trim());
 			ReservDetailVO rd = ReservDetailVO.builder().reservDetail(multikey).build();
 			rdRepo.save(rd);

@@ -79,7 +79,10 @@ function getSchedule() {
 				}  else {
 					let str = "";
 					for(var i = 0;i < resData.length;i++) {
-						str += "<li><a href='#'>" + dateFormat(resData[i].showStart) +"</a></li>";
+						str += "<li class='schedule'><a href='/reservation/" + resData[i].scheduleId + "'>"
+							+ dateFormat(resData[i].showStart) + "<br>"
+							+ resData[i].countSeat +"/" + resData[i].theater.lastSeat
+							+ "석</a></li>";
 					}
 					
 					$("#scheduleTitle").siblings().addClass("hide");

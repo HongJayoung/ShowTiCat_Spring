@@ -9,7 +9,7 @@ import com.ShowTiCat.vo.PointVO;
 
 public interface PointRepository extends JpaRepository<PointVO, Long>{
 
-	@Query(value = "select * from point where member_member_id = ?1", nativeQuery = true)
+	@Query(value = "select * from point where member_member_id = ?1 order by 1 desc", nativeQuery = true)
 	List<PointVO> findByMemberId(String memberId);
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.ShowTiCat.repository.ReservDetailRepository;
 import com.ShowTiCat.repository.ScheduleRepository;
 import com.ShowTiCat.util.DateUtil;
 import com.ShowTiCat.vo.ScheduleVO;
@@ -21,10 +22,18 @@ public class ScheduleController {
 	@Autowired
 	ScheduleRepository scRepo;
 	
+	@Autowired
+	ReservDetailRepository rdRepo;
+	
 	@ResponseBody
 	@PostMapping("/schedule/findSchedule/{showCode}/{placeId}/{date}")
 	public List<ScheduleVO> findSchedule(@PathVariable Long showCode, @PathVariable Long placeId, @PathVariable String date) {
 		Date d = DateUtil.convertToDate(date);
-		return scRepo.findSchedule(showCode, placeId, d, DateUtil.dayAfter(d));
+		List<ScheduleVO> scheduleList = scRepo.findSchedule(showCode, placeId, d, DateUtil.dayAfter(d));
+		for(ScheduleVO s:scheduleList) {
+			String[] reservedSeat = rdRepo.findByScheduleId(s.getScheduleId());
+			s.setCountSeat(s.getTheater().getLastSeat() - reservedSeat.length);
+		}
+		return scheduleList;
 	}
 }
