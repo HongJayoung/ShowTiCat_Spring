@@ -15,11 +15,17 @@
 
 <link rel="stylesheet" th:href="@{/css/header.css}" />
 <link rel="stylesheet" th:href="@{/css/main/showTiCat.css}" />
+
+<style>
+.conBody {
+overflow: scroll;
+}
+</style>
 </head>
 <body>
 	<header th:replace="~{/fragments/header::header1}"></header>
 	
-	<div layout:fragment="content"></div>
+	<div layout:fragment="content" class="contBody"></div>
 	
 	<script>
 

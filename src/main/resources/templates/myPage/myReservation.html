@@ -32,7 +32,7 @@ function goDetail() {
 			<p>- 리뷰는 관람일 다음날 부터 작성 가능합니다. </p>
 		</div>
 			<!-- 취소목록 -->
-			<div class="row justify-content-center">
+			<div class="row">
 				<div class="col-auto">
 					<table class="table table-responsive">
 						<tr>
@@ -41,7 +41,7 @@ function goDetail() {
 							<td>공연/영화 제목</td>
 							<td>관람일</td>
 							<td>시작시간</td>
-							<td></td>
+							<td>상태</td>
 							<td></td>
 						</tr>
 						<tr th:each="reserv:${reservList}">
@@ -57,7 +57,7 @@ function goDetail() {
 							<td th:if="${reserv.payYn eq '관람완료'}" style="color: blue;">
 								관람완료
 							</td>
-							<td th:if="${reserv.payYn eq 'N'}">
+							<td th:if="${reserv.payYn eq 'N'}" style="color: gray;">
 								취소
 							</td>
 							<!-- 상세보기 -->

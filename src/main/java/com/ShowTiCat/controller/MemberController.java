@@ -3,6 +3,7 @@ package com.ShowTiCat.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,7 @@ import com.ShowTiCat.repository.ReservationRepository;
 import com.ShowTiCat.repository.ReviewRepository;
 import com.ShowTiCat.security.MemberServiceImpl;
 import com.ShowTiCat.vo.MemberVO;
+import com.ShowTiCat.vo.PointVO;
 import com.ShowTiCat.vo.ReservDetailVO;
 import com.ShowTiCat.vo.ReservationVO;
 
@@ -61,11 +63,44 @@ public class MemberController {
 	@GetMapping("/myPage/myReservation/{reservationId}")
 	public String reservationDetail(@PathVariable Long reservationId, Model model) {
 		ReservationVO reservation = reRepo.findById(reservationId).get();
-		reservation.setSeat(rdRepo.findByReservationId(reservationId)); 
+		
+		reservation.setSeat(rdRepo.findByReservationId(reservationId));
 		
 		model.addAttribute("reservation", reservation);
 		return "/myPage/reservDetail";
 	}
+	
+	@Transactional
+	@GetMapping("/myPage/cancelReserv/{reservationId}")
+	public String cancelReservation(@PathVariable Long reservationId, HttpSession session) {
+		ReservationVO reservation = reRepo.findById(reservationId).get();
+		reservation.setPayYn("N");
+		reRepo.save(reservation);
+
+		rdRepo.deleteByReservationId(reservationId);
+		
+		MemberVO m = (MemberVO) session.getAttribute("member");
+		Long point = reservation.getPoint().getPoint();
+//		PointVO p = PointVO.builder().member(m)
+//				.point((-1) * point).pointDetail("예매 취소로 인한 사용 취소").build();
+//		pRepo.save(p);
+		m.setMPoint(m.getMPoint() - point);
+
+		Long plusPoint = (long) (reservation.getTotalPrice() * 0.05);
+		if(plusPoint != point) {
+			PointVO p = PointVO.builder().member(m)
+					.point((plusPoint - point) * 20).pointDetail("예매 취소로 인한 사용 취소").build();
+			pRepo.save(p);
+
+			m.setMPoint(m.getMPoint()+p.getPoint());
+		}
+		
+		MemberVO updateM = mRepo.save(m);
+		session.setAttribute("member", updateM);
+
+		return "redirect:/myPage/myReservation/"+reservationId;
+	}
+	
 	
 	@GetMapping("/myPage/myPoint")
 	public void myPoint(HttpSession session, Model model) {
