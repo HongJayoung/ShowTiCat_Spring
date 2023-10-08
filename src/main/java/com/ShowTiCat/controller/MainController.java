@@ -42,4 +42,5 @@ public class MainController {
 		model.addAttribute("showList", showList);
 		return "/main/searchResult";
 	}
+	//IntelliJ Test
 }
